@@ -1,0 +1,32 @@
+# What protocol to use when performing git operations. Supported values: ssh, https
+git_protocol: ssh
+
+# What editor gh should run when creating issues, pull requests, etc. If blank, will refer to environment.
+editor: vim
+
+# When to interactively prompt. This is a global config that cannot be overridden by hostname. Supported values: enabled, disabled
+prompt: enabled
+
+# A pager program to send command output to, e.g. "less". Set the value to "cat" to disable the pager.
+pager: cat
+
+# The authentication method to use. Supported values: token, browser, oauth
+auth_mode: oauth
+
+# Theme for gh command output (auto, dark, light)
+theme: auto
+
+# Aliases allow you to create nicknames for gh commands
+aliases:
+    co: pr checkout
+    prc: pr create
+    prv: pr view
+    prw: pr view --web
+    prl: pr list
+    is: issue status
+    il: issue list
+    ic: issue create
+    iv: issue view
+    iw: issue view --web
+
+version: "1"
