@@ -1,0 +1,84 @@
+# Include aliases
+[include]
+    path = aliases
+
+# Include work/personal configs based on directory
+[includeIf "gitdir:~/work/"]
+    path = config.d/work
+[includeIf "gitdir:~/personal/"]
+    path = config.d/personal
+
+[core]
+    autocrlf = input
+    editor = vim
+    pager = cat 2>&1
+    whitespace = trailing-space,space-before-tab
+
+[init]
+    defaultBranch = main
+
+[color]
+    ui = always
+    diff = auto
+    status = auto
+    branch = auto
+
+[push]
+    default = current
+    followTags = true
+    autoSetupRemote = true
+
+[pull]
+    default = current
+    rebase = true
+
+[fetch]
+    prune = true
+    pruneTags = true
+
+[diff]
+    colorMoved = zebra
+    algorithm = histogram
+    
+[merge]
+    conflictStyle = diff3
+    tool = vimdiff
+
+[branch]
+    autoSetupMerge = always
+    sort = -committerdate
+
+[tag]
+    sort = version:refname
+
+[status]
+    showUntrackedFiles = all
+    
+[commit]
+    template = ~/.config/git/commit-template
+    gpgSign = false
+    verbose = true
+
+[help]
+    autocorrect = 10
+
+[transfer]
+    fsckObjects = true
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+[gpg]
+    program = gpg
+
+[diff "sopsdiffer"]
+    textconv = sops -d
+
+[pager]
+    branch = false
+    tag = false
+    diff = false
+    status = false

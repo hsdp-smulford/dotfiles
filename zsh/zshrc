@@ -1,0 +1,221 @@
+# Enable Powerlevel10k instant prompt
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
+# Path to Oh My Zsh installation
+export ZSH="$HOME/.oh-my-zsh"
+
+# History Configuration
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=1000000
+SAVEHIST=1000000
+setopt EXTENDED_HISTORY       # Record timestamp in history
+setopt HIST_EXPIRE_DUPS_FIRST # Delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt HIST_IGNORE_DUPS       # Ignore duplicated commands in history list
+setopt HIST_IGNORE_SPACE      # Ignore commands that start with space
+setopt HIST_VERIFY           # Show command with history expansion before running it
+setopt SHARE_HISTORY         # Share command history between sessions
+
+# Completion System Configuration
+zstyle ':completion:*' menu select # Enable menu-style completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive completion
+autoload -Uz compinit && compinit
+zmodload zsh/complist
+
+# Directory Navigation
+setopt AUTO_CD              # Just type directory name to cd
+setopt AUTO_PUSHD          # Push the old directory onto the stack on cd
+setopt PUSHD_IGNORE_DUPS   # Don't store duplicates in the stack
+setopt PUSHD_SILENT        # Don't print the directory stack after pushd or popd
+
+# Consolidated PATH setup
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:$HOME/bin:$HOME/.local/bin:$PATH"
+
+# Python-specific PATH (Homebrew Python)
+export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+
+# Go-specific PATH setup
+if command -v go &>/dev/null; then
+  export PATH="$HOME/.krew/bin:$(go env GOPATH)/bin:$PATH"
+fi
+
+# Add current directory to PATH (use with caution)
+export PATH=".:$PATH"
+
+# Environment Variables
+export HOMEBREW_AUTO_UPDATE_SECS="86400"
+export DOCKER_BUILDKIT=1
+export EDITOR='nvim'
+export VISUAL='nvim'
+export PAGER='less'
+export LANG='en_US.UTF-8'
+export LC_ALL='en_US.UTF-8'
+unset LESS
+
+# Less Configuration
+export LESS='-R --mouse --wheel-lines=3'
+export LESSHISTFILE="$HOME/.cache/less/history"
+[[ ! -d "$HOME/.cache/less" ]] && mkdir -p "$HOME/.cache/less"
+
+# AWS Configuration
+export AWS_PAGER=
+export AWS_DEFAULT_OUTPUT=json
+export AWS_DEFAULT_REGION=us-east-1
+
+# FZF Configuration
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Initialize pyenv if available
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init --path)"  # Login shells
+  eval "$(pyenv init -)"       # Interactive shells
+  eval "$(pyenv virtualenv-init -)"  # If using pyenv-virtualenv
+fi
+
+# Node Version Manager (nvm)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# ZSH Theme & Plugins
+ZSH_THEME="robbyrussell"
+plugins=(
+  aws
+  helm
+  git
+  gitignore
+  brew
+  cloudfoundry
+  docker
+  httpie
+  kubectl
+  1password
+  pylint
+  python
+  virtualenv
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  fzf
+  extract
+  docker-compose
+  history-substring-search
+)
+
+# Load Oh My Zsh
+source $ZSH/oh-my-zsh.sh
+
+# Powerlevel10k theme
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Enhanced Aliases
+alias k=kubectl
+alias now='date +"%Y%m%d%H%M"'
+alias t=terraform
+alias gl='git log --graph --oneline --decorate'
+alias uuid="uuidgen | awk '{print tolower($0)}'"
+alias brew-cleanup="brew update && brew upgrade --greedy && brew cleanup"
+alias vi='nvim'
+alias vim='nvim'
+alias ls='ls -G'
+alias ll='ls -lah'
+alias l='ls -lh'
+alias grep='grep --color=auto'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias md='mkdir -p'
+alias rd='rmdir'
+alias dc='docker-compose'
+alias dps='docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"'
+alias ports='netstat -tulanp'
+alias myip='curl http://ipecho.net/plain; echo'
+alias history-stats='history 0 | awk "{print \$2}" | sort | uniq -c | sort -n -r | head'
+
+# Git Aliases
+alias gst='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gpl='git pull'
+alias gd='git diff'
+alias gco='git checkout'
+alias gb='git branch'
+alias gf='git fetch'
+
+# Enable Kubernetes completions
+[[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
+
+# Enable Thefuck
+eval $(thefuck --alias)
+
+# direnv integration
+_direnv_hook() {
+  trap -- '' SIGINT
+  eval "$("/opt/homebrew/bin/direnv" export zsh)"
+  trap - SIGINT
+}
+typeset -ag precmd_functions
+if (( ! ${precmd_functions[(I)_direnv_hook]} )); then
+  precmd_functions=(_direnv_hook $precmd_functions)
+fi
+typeset -ag chpwd_functions
+if (( ! ${chpwd_functions[(I)_direnv_hook]} )); then
+  chpwd_functions=(_direnv_hook $chpwd_functions)
+fi
+
+# Start SSH agent and auto-add key
+eval "$(ssh-agent -s)" &>/dev/null
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519 &>/dev/null
+
+# Key Bindings
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+
+# Custom Functions
+mkcd() { mkdir -p "$@" && cd "$@"; }
+extract() {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xjf $1     ;;
+            *.tar.gz)    tar xzf $1     ;;
+            *.bz2)       bunzip2 $1     ;;
+            *.rar)       unrar e $1     ;;
+            *.gz)        gunzip $1      ;;
+            *.tar)       tar xf $1      ;;
+            *.tbz2)      tar xjf $1     ;;
+            *.tgz)       tar xzf $1     ;;
+            *.zip)       unzip $1       ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1        ;;
+            *)          echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# Weather function
+weather() {
+    curl "wttr.in/${1:-}"
+}
+
+# Kill process on port
+killport() {
+    lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill
+}
+
+# Docker cleanup
+docker-cleanup() {
+    docker system prune --volumes -f
+    docker image prune -a -f
+    docker builder prune -f
+}

@@ -1,0 +1,75 @@
+[alias]
+    # Basic shortcuts
+    s = status --short
+    st = status
+    cl = clone
+    ci = commit
+    co = checkout
+    br = branch
+    dc = diff --cached
+    r = reset
+    rh = reset --hard
+    
+    # Branch operations
+    b = branch -v
+    branches = branch -a
+    current-branch = rev-parse --abbrev-ref HEAD
+    recent-branches = branch --sort=-committerdate --format='%(committerdate:relative)%09%(refname:short)'
+    
+    # Commit operations
+    amend = commit --amend
+    ammend = commit --amend # Common misspelling
+    fixup = commit --fixup
+    undo = reset --soft HEAD^
+    wip = !git add -A && git commit -m 'WIP'
+    unwip = reset HEAD~1
+
+    # Log operations
+    whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+    whatadded = log --diff-filter=A
+    deleted = log --diff-filter=D --summary
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+    last = log -1 HEAD --stat
+    changed = show --pretty="format:" --name-only
+    
+    # Stash operations
+    sl = stash list
+    sp = stash pop
+    ss = stash save
+    
+    # Remote operations
+    f = fetch --all --prune
+    p = push
+    pf = push --force-with-lease
+    pl = pull --rebase
+    remotes = remote -v
+    
+    # Working directory operations
+    discard = checkout --
+    unstage = reset HEAD --
+    cleanup = !git clean -df && git checkout -- .
+    
+    # Advanced features
+    search = "!f() { git log --all -p --source -S \"$1\"; }; f"
+    find-merge = "!sh -c 'commit=$0 && branch=${1:-HEAD} && (git rev-list $commit..$branch --ancestry-path | cat -n; git rev-list $commit..$branch --first-parent | cat -n) | sort -k2 -s | uniq -f1 -d | sort -n | tail -1 | cut -f2'"
+    
+    # Code review helpers
+    review = "!f() { git log --patch --reverse $1..$2; }; f"
+    files = "!f() { git diff --name-status $1^ $1; }; f"
+    
+    # Statistics
+    contributors = shortlog -sn --no-merges
+    weekly = !git log --author=$(git config user.email) --since='1 week ago' --format='%h %ad %s' --date=short
+    
+    # Maintenance
+    maintenance = !git gc --auto && git prune && git fsck
+    optimize = !git repack -a -d -f --depth=1000 --window=200
+    
+    # Fun stuff
+    praise = blame
+    whoami = !git config user.name && git config user.email
+    
+    # GitHub specific
+    pr = "!f() { git fetch origin pull/$1/head:pr-$1 && git checkout pr-$1; }; f"
+    sync = !git pull --rebase && git push
