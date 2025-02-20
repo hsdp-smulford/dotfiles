@@ -1,10 +1,8 @@
 # Include aliases
 [include]
-    path = aliases
-
-# Include work/personal configs based on directory
-[includeIf "gitdir:~/work/"]
     path = config.d/work
+	path = aliases
+
 [includeIf "gitdir:~/personal/"]
     path = config.d/personal
 
