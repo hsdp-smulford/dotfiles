@@ -1,76 +1,67 @@
-# ✨ Dotfiles ✨
+# Dotfiles
 
-Welcome to my dotfiles! 🎉 These configs are designed to live happily in your `~/.config` directory, bringing joy to your development environment while playing nice with your system defaults! 🌈
+Personal configuration files and system setup.
 
-## 🎁 What's Inside
-
-- 🐚 Shell customizations that'll make you smile
-- ✏️ Editor preferences for happy coding
-- 🛠️ Development tools that spark joy
-- 🖥️ Terminal settings for maximum comfort 
-- 🌟 Git configurations for seamless version control
-- 🔧 Installation scripts that respect your existing setup
-
-## 🚀 Installation
-
-1. Clone this treasure chest:
-```bash
-git clone https://github.com/hsdp-smulford/dotfiles.git
-```
-
-2. Create your config home (if it doesn't exist):
-```bash
-mkdir -p ~/.config
-```
-
-3. Let the magic happen:
-```bash
-# Create symlinks for what you need! ✨
-ln -s $(pwd)/dotfiles/nvim ~/.config/nvim
-ln -s $(pwd)/dotfiles/zsh ~/.config/zsh
-```
-
-## 📁 Structure
+## Structure
 
 ```
 .
-├── nvim/         # 🎨 Neovim configuration
-├── zsh/          # 🐚 ZSH user configuration
-├── git/          # 🌳 Git user configuration
-├── ...
-└── scripts/      # 🔧 Utility scripts
+├── config/          # XDG_CONFIG_HOME files (~/.config)
+│   ├── zsh/         # ZSH configuration
+│   ├── git/         # Git configuration
+│   └── ...          # Other app configs
+├── etc.zshrc        # Reference copy of system /etc/zshrc
+├── LICENSE
+└── README.md        # YOU ARE HERE.
 ```
 
-## 🛡️ Safety Features
+## Installation
 
-- 🏠 All configs live peacefully in `~/.config`
-- 🔗 Uses symlinks for easy updates
-- 🔒 Keeps your system files safe
-- 🎯 Easy to enable/disable specific configs
-- 💾 Preserves your existing setup
-
-## 🎮 Usage
-
-1. 👀 Check out the configs you want
-2. 🔗 Symlink your favorites
-3. 🚀 Power up your shell:
+1. Clone this repository:
 ```bash
-# Add to your ~/.zshrc or ~/.bashrc
-source ~/.config/zsh/custom.zsh
+git clone git@github.com:hsdp-smulford/dotfiles.git ~/dev/dotfiles
 ```
 
-## 🎨 Customization
-
-Feel free to remix these configs! The structure makes it easy to:
-- ➕ Add new goodies
-- 🔄 Modify existing setups
-- ➖ Remove what you don't need
-- 🎯 Keep your changes separate from system files
-
-## 💾 Backup
-
-Even though these configs are super careful, it's good to have backups:
+2. Set up symlinks:
 ```bash
-cp -r ~/.config/nvim ~/.config/nvim.backup
-cp -r ~/.config/zsh ~/.config/zsh.backup
+# Link config directory
+rm -rf ~/.config
+ln -s ~/dev/dotfiles/config ~/.config
 ```
+
+3. Install system-wide zsh configuration (if needed):
+```bash
+# Backup existing zshrc
+sudo cp /etc/zshrc /etc/zshrc.backup
+
+# Install new system zshrc
+sudo cp ~/.config/zsh/zshrc.system /etc/zshrc
+```
+
+## Components
+
+### ZSH Configuration
+- `config/zsh/.zshrc` - Personal ZSH configuration
+- `config/zsh/.p10k.zsh` - Powerlevel10k theme configuration
+- `config/zsh/zshrc.system` → `/etc/zshrc` - System-wide ZSH configuration
+
+### Application Configs
+- `config/atuin/` - Shell history search
+- `config/brew/` - Homebrew packages and installation
+- `config/git/` - Git configuration and aliases
+- `config/nvim/` - Neovim configuration
+- And more in the `config/` directory
+
+## New Machine Setup
+
+1. Clone this repository to `~/dev/dotfiles`
+2. Run the installation steps above
+3. Install necessary packages and applications
+
+## Contributing
+
+Get off my lawn. 🌳🔪
+
+## License
+
+See [LICENSE](LICENSE) file.

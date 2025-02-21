@@ -219,6 +219,7 @@ alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[
 # System
 alias cpuinfo='sysctl -n machdep.cpu.brand_string'
 alias meminfo='ps aux | sort -nr -k 4 | head -10'
+eval "$(thefuck --alias)"
 
 # Housekeeping
 alias docker-clean='docker system prune -af'

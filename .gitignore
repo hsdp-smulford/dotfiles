@@ -1,0 +1,99 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Credentials, tokens, and sensitive configs
+config/gcloud/credentials/
+config/gcloud/legacy_credentials/
+config/gcloud/access_tokens.db
+config/gcloud/credentials.db
+config/gcloud/configurations/
+config/gcloud/active_config
+config/gcloud/.last_update_check.json
+config/gcloud/.last_survey_prompt.yaml
+config/gcloud/logs/
+config/gcloud/gce
+config/gh/hosts.yml
+config/gh-copilot/config.yml
+config/op/
+config/expressvpn/
+config/k9s/config.yaml
+**/auth.json
+**/credentials.json
+**/*.key
+**/*.pem
+**/*.crt
+
+# Cache and compiled files
+config/zsh/.zcompdump*
+config/zsh/.zsh_history
+config/zsh/.zsh_sessions/
+config/**/*.zwc
+config/**/*.zwc.old
+**/cache/
+**/__pycache__/
+
+# Local state and history
+config/atuin/history.db
+config/atuin/*.log
+config/atuin/atuin_backup/
+config/uv/uv-receipt.json
+config/iterm2/AppSupport
+config/iterm2/sockets/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs and databases
+*.log
+*.sqlite
+*.sqlite3
+*.db
+*.db-*
+
+# Package manager files
+node_modules/
+.npm
+yarn.lock
+package-lock.json
+pip-log.txt
+
+# Language-specific
+## Python
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+build/
+develop-eggs/
+dist/
+eggs/
+*.egg-info/
+
+## Node
+.node_repl_history
+.node_history
+
+# Local overrides and machine-specific configs
+config/git/config.d/local
+config/git/config.local
+**/*.local
+**/*.local.*
+
+# Community files that should be downloaded instead of versioned
+config/cheat/cheatsheets/community/

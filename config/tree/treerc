@@ -1,0 +1,63 @@
+# List of files and directories to ignore
+ignore = [
+    ".git",           # Git metadata
+    ".pytest_cache",  # pytest cache
+    "htmlcov",        # Coverage reports
+    ".mypy_cache",    # mypy type-checking cache
+    ".ruff_cache",    # Ruff linting cache
+    ".venv",          # Python virtual environments
+    "node_modules",   # JavaScript dependencies
+    "__pycache__",    # Python bytecode cache
+    "*.log",          # Log files
+    "*.tmp",          # Temporary files
+    "*.bak"           # Backup files
+]
+
+# Use colors in the tree output
+color = always
+
+# Define the color scheme
+colors = {
+    "directory": "blue",        # Directories are displayed in blue
+    "symlink": "cyan",          # Symlinks are displayed in cyan
+    "executable": "green",      # Executables are displayed in green
+    "file": "default",          # Regular files use the terminal default
+    "pipe": "magenta",          # Pipes are displayed in magenta
+    "socket": "yellow",         # Sockets are displayed in yellow
+}
+
+# Specify the maximum depth to display in the tree
+max-depth = 5
+
+# Display file sizes in human-readable format
+file-size = human-readable
+
+# Show hidden files (dotfiles)
+show-hidden = true
+
+# Follow symbolic links (can cause infinite loops if circular links exist)
+follow-links = false
+
+# Sort order: alphabetical (default), modification time, size, or none
+sort = alphabetical
+
+# Display the full path of files and directories
+full-path = false
+
+# Include file and directory counts in the output
+count = true
+
+# Print the tree with indentation lines
+line-drawing = true
+
+# Restrict output to specific file extensions
+include-extensions = [
+    ".py",          # Python files
+    ".js",          # JavaScript files
+    ".html",        # HTML files
+    ".css",         # CSS files
+    ".md",          # Markdown files
+    ".json",        # JSON files
+    ".yaml",        # YAML files
+]
+
