@@ -1,10 +1,10 @@
 # Include aliases
 [include]
-    path = config.d/work
+    path = config.d/personal
 	path = aliases
 
-[includeIf "gitdir:~/personal/"]
-    path = config.d/personal
+[includeIf "gitdir:~/work/"]
+    path = config.d/work
 
 [core]
     autocrlf = input
