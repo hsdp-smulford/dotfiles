@@ -71,6 +71,13 @@
 
 [gpg]
     program = gpg
+    format = ssh
+
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[commit]
+  gpgsign = true
 
 [diff "sopsdiffer"]
     textconv = sops -d
@@ -81,5 +88,6 @@
     diff = false
     status = false
 [user]
-	name = shawn.mulford
-	email = shawn.mulford@philips.com
+    name = shawn.mulford
+    email = shawn.mulford@philips.com
+    signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINSpaAowxvRsj9r6SAlSbAkDhAmaj8dvSzCBPeL0qtJ/
