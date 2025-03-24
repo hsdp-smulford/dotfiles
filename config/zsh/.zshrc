@@ -46,7 +46,7 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:$HOME/.local/bin:$
 
 # Python setup
 export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
-export PATH="${PYENV_ROOT}/bin:$PATH"
+export PATH="${PYENV_ROOT}/bin:$PATH:."
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
@@ -155,7 +155,6 @@ export AWS_DEFAULT_REGION=us-east-1
 
 # Modern CLI replacements
 alias cat='bat'
-alias dig='dog'
 alias du='dust'
 alias find='fd'
 alias ls='eza'
@@ -196,10 +195,23 @@ alias ssha='eval $(ssh-agent) && ssh-add'
 alias cpuinfo='sysctl -n machdep.cpu.brand_string'
 alias meminfo='ps aux | sort -nr -k 4 | head -10'
 
+# HAP
+export ADDONS=~/hap/terraform-k8s-addons
+export COMMON=~/hap/terraform-common
+export EKS=~/hap/terraform-eks
+export INFRA=~/hap/infra
+export HAP=~/hap/hsp-aws-platform
+export PLAY=~/hap/playground
+export VPC=~/hap/terraform-vpc
+alias hap='cd $HAP'
+
 # Homebrew
 export HOMEBREW_BUNDLE_FILE="$XDG_CONFIG_HOME/brew/Brewfile"
 export HOMEBREW_CACHE="$XDG_CACHE_HOME/homebrew"
 export HOMEBREW_LOGS="$XDG_STATE_HOME/homebrew/logs"
+
+# Needed for 1password ssh keys
+SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 
 # Utility functions
 function mkcd() { mkdir -p "$@" && cd "$@"; }
@@ -249,28 +261,37 @@ function weather() {
     curl "wttr.in/${1:-}"
 }
 
+# Custom functions for DevOps
+kube-pods() { kubectl get pods --all-namespaces | grep -i "$1"; }
+aws-instances() { aws ec2 describe-instances --query 'Reservations[].Instances[].[Tags[?Key==`Name`].Value | [0], InstanceId, State.Name, PrivateIpAddress]' --output table; }
+
+# Brew maintenance (both names for compatibility)
 function brew-maintenance() {
+    brew-housekeeping
+}
+
+function brew-housekeeping() {
     echo "🍺 Updating Homebrew..."
     brew update
-    
+
     echo "🍺 Upgrading packages..."
     brew upgrade
-    
+
     echo "🍺 Cleaning up..."
     brew cleanup -s
-    
+
     echo "🍺 Removing dead symlinks..."
     brew cleanup --prune=all
-    
+
     echo "🍺 Running doctor..."
     brew doctor
-    
+
     echo "🍺 Checking for missing dependencies..."
     brew missing
-    
+
     echo "🍺 Updating Brewfile..."
     brew bundle dump --force --file="$HOMEBREW_BUNDLE_FILE"
-    
+
     echo "✨ Brew maintenance complete!"
 }
 
@@ -285,6 +306,9 @@ alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[
 
 # Quick edits
 alias zshrc='$EDITOR ${ZDOTDIR}/.zshrc'
+
+# Housekeeping
+alias docker-clean='docker system prune -af'
 
 # Initialize modern tools
 eval "$(direnv hook zsh)"

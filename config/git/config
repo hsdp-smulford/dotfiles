@@ -80,3 +80,6 @@
     tag = false
     diff = false
     status = false
+[user]
+	name = shawn.mulford
+	email = shawn.mulford@philips.com
