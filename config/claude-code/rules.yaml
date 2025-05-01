@@ -1,0 +1,34 @@
+# Location: $XDG_CONFIG_HOME/claude-code/rules.yaml
+
+# DevOps & Platform-specific rules
+rules:
+  - name: "infrastructure_as_code"
+    description: "Validate Infrastructure as Code patterns"
+    enabled: true
+    patterns:
+      - file_types: ["tf", "yaml", "json"]
+        rules:
+          - "No hardcoded credentials"
+          - "Use variables for environment-specific values"
+          - "Include proper error handling"
+    
+  - name: "container_best_practices"
+    description: "Docker/container optimization patterns"
+    enabled: true
+    patterns:
+      - file_types: ["dockerfile", "docker-compose.yml"]
+        rules:
+          - "Multi-stage builds where appropriate"
+          - "Minimal base images"
+          - "Proper layer caching"
+  
+  - name: "ci_cd_patterns"
+    description: "CI/CD pipeline best practices"
+    enabled: true
+    patterns:
+      - file_types: ["yml", "yaml", "json"]
+        path_patterns: ["**/workflows/**", "**/pipelines/**"]
+        rules:
+          - "Include proper failure handling"
+          - "Implement reasonable timeouts"
+          - "Use caching where appropriate"

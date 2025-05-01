@@ -63,6 +63,12 @@ export NVM_COMPLETION=true
 export NVM_LAZY_LOAD=true
 export NVM_LAZY_LOAD_EXTRA_COMMANDS=('nvim')
 
+# npm XDG configuration
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm"
+export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
+export PATH="$XDG_DATA_HOME/npm/bin:$PATH"
+
 # Modern environment variables
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
@@ -73,6 +79,9 @@ export LANG=en_US.UTF-8
 export BAT_THEME="Dracula"
 export BAT_PAGING="never"
 export BAT_STYLE="plain"
+
+# Anthropic/claude cli
+export CLAUDE_CODE_CONFIG_HOME="$XDG_CONFIG_HOME/claude-code"
 
 # FZF Configuration
 export FZF_BASE="$(brew --prefix)/opt/fzf"
