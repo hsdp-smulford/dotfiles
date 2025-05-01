@@ -1,161 +1,75 @@
 {
-    "theme": "Solarized Dark",
-    "fontFamily": "Fira Code, Menlo, monospace",
-    "fontSize": 15,
-    "autosave": "onFocusChange",
-    "minimap": true,
-    "lineNumbers": "on",
-    "wordWrap": "bounded",
-    "tabSize": 2,
-    "formatOnSave": true,
-    "codeActionsOnSave": {
-        "source.organizeImports": true,
-        "source.fixAll": true
+  "core": {
+    "xdg_compliance": true,
+    "default_shell": "zsh"
+  },
+  "credentials": {
+    "sources": {
+      "claude_api": {
+        "type": "script",
+        "path": "$XDG_CONFIG_HOME/claude-code/scripts/get_1password_key.sh"
+      },
+      "aws": {
+        "type": "environment"
+      },
+      "github": {
+        "type": "script",
+        "path": "$XDG_CONFIG_HOME/claude-code/scripts/get_github_token.sh"
+      }
+    }
+  },
+  "workflow": {
+    "auto_save": true,
+    "session_persistence": true,
+    "history_retention_days": 30
+  },
+  "editor_integration": {
+    "vscode": true,
+    "vim": true,
+    "auto_format": true
+  },
+  "language_servers": {
+    "golang": {
+      "enabled": true,
+      "linters": ["golangci-lint", "staticcheck"]
     },
-    "terminal.integrated.fontFamily": "Fira Mono, monospace",
-    "terminal.integrated.shell.osx": "/bin/zsh",
-    "terminal.integrated.scrollback": 10000,
-    "terminal.integrated.cursorBlinking": true,
-    "terminal.integrated.env.osx": {
-        "PATH": "${env:PATH}:/usr/local/bin:/opt/homebrew/bin"
+    "python": {
+      "enabled": true,
+      "linters": ["pylint", "mypy", "black"]
     },
-    "terminal.integrated.tabs.enabled": true,
-    "terminal.integrated.defaultProfile.osx": "zsh",
-    "tasks": {
-        "build": "make build",
-        "test": "make test",
-        "deploy": "make deploy"
+    "terraform": {
+      "enabled": true,
+      "linters": ["tflint", "tfsec"]
     },
-    "eslint.enable": true,
-    "prettier.enable": true,
-    "editor.formatOnPaste": true,
-    "editor.formatOnType": true,
-    "editor.rulers": [80, 120],
-    "editor.snippetSuggestions": "top",
-    "editor.snippets": [".vscode/snippets", "~/.config/windsurf/snippets"],
-    "golang.lintTool": "golangci-lint",
-    "golang.formatTool": "gofumpt",
-    "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
-    "python.linting.mypyEnabled": true,
-    "python.formatting.provider": "black",
-    "python.linting.pylintEnabled": false,
-    "python.linting.banditEnabled": true,
-    "terraform.formatOnSave": true,
-    "terraform.lintTool": "tflint",
-    "markdownlint.config": {
-        "default": true,
-        "MD013": false
+    "javascript": {
+      "enabled": true,
+      "linters": ["eslint", "prettier"]
     },
-    "yaml.schemas": {
-        "kubernetes": "*.k8s.yaml"
+    "kubernetes": {
+      "enabled": true,
+      "linters": ["kubeval", "kube-linter"]
+    }
+  },
+  "development": {
+    "local_env": {
+      "colima": {
+        "enabled": true,
+        "auto_start": true,
+        "default_profile": "dev"
+      },
+      "k8s": {
+        "context_management": true,
+        "default_context": "colima"
+      }
     },
-    "git.preCommitHooks": ["lint", "format"],
-    "extensions.autoCheckUpdates": true,
-    "extensions.autoUpdate": true,
-    "extensions.packs": [
-        "ms-vscode.Go-Pack",
-        "ms-vscode.Python-Pack"
-    ],
-    "extensions.recommendations": [
-        "golang.go",
-        "ms-python.python",
-        "hashicorp.terraform",
-        "ms-azuretools.vscode-docker",
-        "redhat.vscode-yaml",
-        "ms-kubernetes-tools.vscode-kubernetes-tools",
-        "esbenp.prettier-vscode",
-        "dbaeumer.vscode-eslint",
-        "bierner.markdown-preview-github-styles",
-        "bradlc.vscode-tailwindcss",
-        "AWS.aws-toolkit-vscode"
-    ],
-    "git.autofetch": true,
-    "git.confirmSync": false,
-    "git.enableSmartCommit": true,
-    "git.decorations.enabled": true,
-    "providers": {
-        "anthropic": {
-            "api_key": "${ANTHROPIC_API_KEY}",
-            "model": "claude-3-opus-20240229",
-            "fallback_model": "claude-3-sonnet-20240229",
-            "temperature": 0.2,
-            "max_tokens": 4096
-        },
-        "openai": {
-            "api_key": "${OPENAI_API_KEY}",
-            "model": "gpt-4-turbo",
-            "fallback_model": "gpt-3.5-turbo",
-            "temperature": 0.3,
-            "max_tokens": 4096
-        },
-        "aws": {
-            "profile": "${AWS_PROFILE}",
-            "region": "us-east-1",
-            "alternate_profiles": ["${AWS_PROFILE_ALT1}", "${AWS_PROFILE_ALT2}"],
-            "alternate_regions": ["us-west-2", "eu-west-1"]
-        }
-    },
-    "env": {
-        "DOTENV_PATH": ".env",
-        "SECRET_FILE": ".secrets.json"
-    },
-    "workspaceSettings": {
-        "projectA": {
-            "python.formatting.provider": "black",
-            "python.linting.flake8Enabled": true
-        },
-        "projectB": {
-            "python.formatting.provider": "autopep8",
-            "python.linting.pylintEnabled": true
-        }
-    },
-    "window.zoomLevel": 0,
-    "workbench.startupEditor": "newUntitledFile",
-    "workbench.activityBar.visible": true,
-    "workbench.statusBar.visible": true,
-    "workbench.sideBar.location": "left",
-    "explorer.openEditors.visible": 0,
-    "breadcrumbs.enabled": true,
-    "editor.cursorSmoothCaretAnimation": true,
-    "editor.smoothScrolling": true,
-    "editor.quickSuggestions": true,
-    "editor.suggestSelection": "first",
-    "editor.parameterHints.enabled": true,
-    "editor.inlineSuggest.enabled": true,
-    "editor.guides.bracketPairs": true,
-    "files.exclude": {
-        "**/.git": true,
-        "**/.DS_Store": true,
-        "**/node_modules": true,
-        "**/dist": true,
-        "**/.env": true,
-        "**/.envrc": true,
-        "**/.terraform": true,
-        "**/.vscode": true
-    },
-    "files.watcherExclude": {
-        "**/.git/objects/**": true,
-        "**/.git/subtree-cache/**": true,
-        "**/node_modules/**": true,
-        "**/.env": true
-    },
-    "files.maxMemoryForLargeFilesMB": 4096,
-    "editor.largeFileOptimizations": true,
-    "security.workspace.trust.enabled": false,
-    "security.secretScanning.enabled": true,
-    "security.secretScanning.providers": ["GitHub", "AWS", "Gitleaks"],
-    "editor.accessibilitySupport": "on",
-    "telemetry.enableTelemetry": false,
-    "telemetry.enableCrashReporter": false,
-    "dev.containers": {
-        "dockerComposeFile": "docker-compose.yml",
-        "service": "app",
-        "workspaceFolder": "/workspace"
-    },
-    "remote.SSH.remotePlatform": {
-        "linux": "bash",
-        "darwin": "zsh"
-    },
-    "remote.WSL.enabled": false
+    "ci_integration": {
+      "github_actions": true,
+      "issue_ops": true
+    }
+  },
+  "performance": {
+    "cache_ttl": 3600,
+    "concurrent_operations": 4,
+    "memory_limit_mb": 1024
+  }
 }
