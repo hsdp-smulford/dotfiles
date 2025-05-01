@@ -1,34 +1,76 @@
 # Location: $XDG_CONFIG_HOME/claude-code/rules.yaml
 
-# DevOps & Platform-specific rules
 rules:
-  - name: "infrastructure_as_code"
-    description: "Validate Infrastructure as Code patterns"
+  - name: "IaC"
+    description: "IaC validation patterns"
     enabled: true
     patterns:
-      - file_types: ["tf", "yaml", "json"]
+      - file_types: ["tf", "yaml", "json", "hcl"]
         rules:
           - "No hardcoded credentials"
-          - "Use variables for environment-specific values"
-          - "Include proper error handling"
+          - "Use variables for environment values"
+          - "Proper error handling"
+          - "State management best practices"
+          - "Resource tagging consistency"
     
-  - name: "container_best_practices"
-    description: "Docker/container optimization patterns"
+  - name: "container_security"
+    description: "Container security patterns"
     enabled: true
     patterns:
-      - file_types: ["dockerfile", "docker-compose.yml"]
+      - file_types: ["dockerfile", "docker-compose.yml", "yaml"]
         rules:
-          - "Multi-stage builds where appropriate"
+          - "Multi-stage builds"
+          - "Non-root users"
           - "Minimal base images"
-          - "Proper layer caching"
+          - "Up-to-date dependencies"
+          - "Secret management"
   
-  - name: "ci_cd_patterns"
-    description: "CI/CD pipeline best practices"
+  - name: "golang"
+    description: "Go best practices"
+    enabled: true
+    patterns:
+      - file_types: ["go"]
+        rules:
+          - "Error handling consistency"
+          - "Context propagation"
+          - "Proper concurrency patterns"
+          - "Memory management"
+          - "Testability"
+
+  - name: "python"
+    description: "Python best practices"
+    enabled: true
+    patterns:
+      - file_types: ["py"]
+        rules:
+          - "Type hinting"
+          - "Error handling"
+          - "Dependency management"
+          - "Test coverage"
+          - "Async patterns when appropriate"
+
+  - name: "CI/CD"
+    description: "CI/CD optimization"
     enabled: true
     patterns:
       - file_types: ["yml", "yaml", "json"]
-        path_patterns: ["**/workflows/**", "**/pipelines/**"]
+        path_patterns: ["**/workflows/**", "**/pipelines/**", "**/.github/**"]
         rules:
-          - "Include proper failure handling"
-          - "Implement reasonable timeouts"
-          - "Use caching where appropriate"
+          - "Parallel execution"
+          - "Efficient caching"
+          - "Conditional steps"
+          - "Resource optimization"
+          - "Security scanning integration"
+  
+  - name: "k8s"
+    description: "K8s manifest best practices"
+    enabled: true
+    patterns:
+      - file_types: ["yaml", "yml"]
+        path_patterns: ["**/manifests/**", "**/*.k8s.yml", "**/*.k8s.yaml"]
+        rules:
+          - "Resource limits"
+          - "Network policy"
+          - "Pod security contexts"
+          - "Image pull policies"
+          - "Health check implementation"

@@ -1,4 +1,3 @@
-# Claude Code Main Configuration
 # Location: $XDG_CONFIG_HOME/claude-code/config.yaml
 
 # Core settings
@@ -6,87 +5,55 @@ core:
   log_level: "info"
   telemetry: false
   update_check: weekly
+  xdg_compliant: true
+  default_languages: ["python", "terraform", "json", "go", "yaml", "javascript", "shell"]
 
 # Default model settings
 model:
   name: "claude-3-7-sonnet-20250219"
   context_window: 200000
+  fallback_model: "claude-3-5-sonnet-20240620"
   
-# Performance tuning
-performance:
-  max_concurrent_requests: 4
-  request_timeout: 120
-  cache_enabled: true
-  cache_ttl: 3600
-
-# Output preferences
-output:
-  format: "markdown"
-  color: true
-  verbose: false
-
-# Project behavior
-project:
-  ignore_patterns:
-    - "node_modules"
-    - ".git"
-    - "dist"
-    - "build"
-  
-# API Configuration - SENSITIVE DATA HANDLED SEPARATELY
+# API Configuration
 api:
   url: "https://api.anthropic.com/v1"
   credentials_source: "script"
   credentials_script: "$XDG_CONFIG_HOME/claude-code/scripts/get_1password_key.sh"
+  rate_limit_strategy: "adaptive"
 
-# Editor integration
-editors:
-  warp:
+# DevOps Integrations
+integrations:
+  github:
     enabled: true
-    ai_completions: true
-    command_palette_integration: true
-  cursor:
+    pr_review: true
+    issue_analysis: true
+    ci_optimization: true
+  aws:
     enabled: true
-    ai_suggestions: true
-    inline_completions: true
+    iac_validation: true
+    credentials_source: "environment"
+  kubernetes:
+    enabled: true
+    manifest_validation: true
+    helm_chart_analysis: true
+  terraform:
+    enabled: true
+    plan_analysis: true
+    security_scan: true
+  docker:
+    enabled: true
+    image_optimization: true
+    colima_integration: true
 
-# Command aliases - frequently used shortcuts
+# Command aliases - expanded
 aliases:
   "e": "claude-code explain"
   "f": "claude-code fix"
   "i": "claude-code improve"
   "t": "claude-code test"
   "g": "claude-code generate"
+  "r": "claude-code review"
+  "s": "claude-code security-scan"
+  "tf": "claude-code terraform-analyze"
+  "k8s": "claude-code k8s-validate"
 
-# Basic rules for Claude Code behavior
-rules:
-  - name: "security_first"
-    description: "Flag potential security vulnerabilities in code"
-    enabled: true
-    severity: "high"
-  
-  - name: "best_practices"
-    description: "Follow industry best practices"
-    enabled: true
-    severity: "medium"
-    
-  - name: "performance_optimization"
-    description: "Suggest performance improvements"
-    enabled: true
-    severity: "medium"
-    
-  - name: "test_coverage"
-    description: "Ensure adequate test coverage"
-    enabled: true
-    severity: "medium"
-    
-  - name: "documentation"
-    description: "Enforce proper documentation"
-    enabled: true
-    severity: "low"
-
-# Integration hooks
-hooks:
-  pre_commit: true
-  pre_push: false
-  terminal_integration: true
