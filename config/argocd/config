@@ -1,0 +1,19 @@
+contexts:
+- name: grpc-argocd.4bf0-use1.d10d448.dev.hsp.philips.com
+  server: grpc-argocd.4bf0-use1.d10d448.dev.hsp.philips.com
+  user: grpc-argocd.4bf0-use1.d10d448.dev.hsp.philips.com
+- name: grpc-argocd.ecf1-use1.01ecb4f.dev.hsp.philips.com
+  server: grpc-argocd.ecf1-use1.01ecb4f.dev.hsp.philips.com
+  user: grpc-argocd.ecf1-use1.01ecb4f.dev.hsp.philips.com
+current-context: grpc-argocd.4bf0-use1.d10d448.dev.hsp.philips.com
+prompts-enabled: false
+servers:
+- grpc-web-root-path: ""
+  server: grpc-argocd.4bf0-use1.d10d448.dev.hsp.philips.com
+- grpc-web-root-path: ""
+  server: grpc-argocd.ecf1-use1.01ecb4f.dev.hsp.philips.com
+users:
+- auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcmdvY2QiLCJzdWIiOiJhZG1pbjpsb2dpbiIsImV4cCI6MTc0NTU3OTE3MCwibmJmIjoxNzQ1NDkyNzcwLCJpYXQiOjE3NDU0OTI3NzAsImp0aSI6ImZjZmNkMzNiLTI1ZTgtNDc0Ni05MWFjLTdmMTdlMmFkMzFlMSJ9.e2UKm_NOQ8L6HrD1A_2s2wzo2InQphmUAC0SZ-tuIX4
+  name: grpc-argocd.4bf0-use1.d10d448.dev.hsp.philips.com
+- auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcmdvY2QiLCJzdWIiOiJhZG1pbjpsb2dpbiIsImV4cCI6MTc0NDMwNTU4MSwibmJmIjoxNzQ0MjE5MTgxLCJpYXQiOjE3NDQyMTkxODEsImp0aSI6ImE1ZWM2YmUwLWM1NmItNDI2ZS1hYTRkLTRkNGY3MDgyNDM1OCJ9.dV_sE02KNRKYKu23JmZRYVMzduGamn7jI9jRoEVx7xw
+  name: grpc-argocd.ecf1-use1.01ecb4f.dev.hsp.philips.com

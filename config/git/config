@@ -69,16 +69,6 @@
     process = git-lfs filter-process
     required = true
 
-[gpg]
-    program = gpg
-    format = ssh
-
-[gpg "ssh"]
-  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
-
-[commit]
-  gpgsign = true
-
 [diff "sopsdiffer"]
     textconv = sops -d
 
@@ -90,4 +80,4 @@
 [user]
     name = shawn.mulford
     email = shawn.mulford@philips.com
-    signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINSpaAowxvRsj9r6SAlSbAkDhAmaj8dvSzCBPeL0qtJ/
+	signingkey = A6F5C3AB065670C9

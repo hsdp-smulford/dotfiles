@@ -91,6 +91,8 @@ plugins=(
   direnv
   docker
   docker-compose
+  fast-syntax-highlighting
+  forgit
   fzf
   gcloud
   gh
@@ -112,6 +114,7 @@ plugins=(
   terraform
   vagrant
   virtualenv
+  zsh-autosuggestions
 )
 
 # Load Oh My Zsh
@@ -129,13 +132,20 @@ complete -C '/usr/local/bin/aws_completer' aws
 # DevOps/Container aliases
 alias k='kubectl'
 alias kns='kubens'
+alias kn='kubens'
 alias kctx='kubectx'
+alias kx='kubectx'
 alias kg='kubectl get'
 alias kd='kubectl describe'
 alias kl='kubectl logs'
 alias ke='kubectl exec -it'
 alias ka='kubectl apply -f'
 alias kds='kubectl delete -f'
+alias kgp='kubectl get pods'
+alias kgpa='kubectl get pods --all-namespaces'
+alias kgd='kubectl get deployments'
+alias kgs='kubectl get services'
+alias kgi='kubectl get ingress'
 
 alias d='docker'
 alias dc='docker compose'
@@ -146,12 +156,26 @@ alias drm='docker rm'
 alias drmi='docker rmi'
 alias dexec='docker exec -it'
 alias dlogs='docker logs'
+alias dcp='docker compose pull'
+alias dcu='docker compose up -d'
+alias dcd='docker compose down'
+alias dcl='docker compose logs -f'
+alias dcps='docker compose ps'
 
 # AWS aliases
 alias aws-whoami='aws sts get-caller-identity'
-alias awsp='export AWS_PROFILE=$(aws configure list-profiles | fzf)'
 export AWS_PAGER=
 export AWS_DEFAULT_REGION=us-east-1
+
+# Terraform aliases
+alias t='terraform'
+alias tf='terraform'
+alias tfi='terraform init'
+alias tfp='terraform plan'
+alias tfa='terraform apply'
+alias tfd='terraform destroy'
+alias tff='terraform fmt -recursive'
+alias tfv='terraform validate'
 
 # Modern CLI replacements
 alias cat='bat'
@@ -181,6 +205,11 @@ alias gp='git push'
 alias gpl='git pull'
 alias gpr='git pull --rebase'
 alias glog='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+alias gcl='git clone'
+alias gf='git fetch --all --prune'
+alias grhh='git reset --hard HEAD'
+alias gsta='git stash'
+alias gstp='git stash pop'
 
 # Navigation aliases
 alias ..='cd ..'
@@ -212,6 +241,7 @@ export HOMEBREW_LOGS="$XDG_STATE_HOME/homebrew/logs"
 
 ## Needed for 1password ssh keys
 #SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+export GPG_TTY=$(tty)
 
 # Utility functions
 function mkcd() { mkdir -p "$@" && cd "$@"; }
@@ -302,8 +332,11 @@ alias now='date +"%Y-%m-%d %H:%M:%S"'
 alias utcnow='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 alias ip="curl -s https://ipinfo.io/ip"
 alias localip="ipconfig getifaddr en0"
+alias cip="colima status --json | jq -r .ip_address"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
-
+function path() {
+  echo $PATH | tr ':' '\n'
+}
 # Quick edits
 alias zshrc='$EDITOR ${ZDOTDIR}/.zshrc'
 
@@ -321,3 +354,63 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
+
+# JSON/YAML processing
+alias jq='jq -C'  # Colorized output
+alias yqy='yq -y' # YAML output
+alias yqj='yq -j' # JSON output
+
+# Enhanced AWS profile selection with preview
+function awsp() {
+  local profile=$(aws configure list-profiles | fzf --preview 'aws sts get-caller-identity --profile {} 2>/dev/null || echo "Not authenticated"')
+  if [[ -n $profile ]]; then
+    export AWS_PROFILE=$profile
+    echo "AWS profile set to: $profile"
+  fi
+}
+
+# Enhanced kubectx with preview
+function kctxf() {
+  local context=$(kubectx | fzf --preview 'kubectl config get-contexts {} | head -n 1; echo "\nNodes:"; kubectl get nodes --context {} 2>/dev/null')
+  if [[ -n $context ]]; then
+    kubectx $context
+  fi
+}
+
+# Quick access to HAP directories with autocomplete
+function hcd() {
+  local dir
+  dir=$(find ~/hap -type d -maxdepth 2 | fzf)
+  if [[ -n $dir ]]; then
+    cd "$dir"
+  fi
+}
+
+# AWS enhanced functions
+function aws-ssh() {
+  local instance=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[InstanceId,Tags[?Key==`Name`].Value|[0],State.Name,PrivateIpAddress]' --output text | grep running | fzf | awk '{print $1}')
+  if [[ -n $instance ]]; then
+    echo "Connecting to $instance..."
+    aws ssm start-session --target $instance
+  fi
+}
+
+# Fun terminal enhancements
+alias rainbow='lolcat'
+alias yolo='git add . && git commit -m "$(curl -s https://whatthecommit.com/index.txt)" && git push'
+alias matrix='cmatrix -s -b'
+alias pipes='pipes.sh'
+
+# Start terminal with a random colorful header
+function header() {
+  figlet -f "$(find /usr/local/share/figlet/fonts -name "*.flf" | sort -R | head -1)" "$(hostname)" | lolcat
+}
+
+# Show random quote on startup
+function random_quote() {
+  curl -s https://api.quotable.io/random | jq -r '"\(.content)" - \(.author)'
+}
+
+# Execute on startup if you want
+# header
+# random_quote
