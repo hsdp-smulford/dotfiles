@@ -198,6 +198,7 @@ alias top='btop'
 alias tree='eza --tree'
 alias vi='nvim'
 alias vim='nvim'
+alias ff='fastfetch'
 
 # Git aliases
 alias g='git'
