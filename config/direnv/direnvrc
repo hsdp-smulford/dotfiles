@@ -1,0 +1,164 @@
+# ~/.config/direnv/direnvrc
+# Enhances direnv with useful functions for development environments
+
+# Load a .env file into environment variables
+# Usage: dotenv /path/to/.env
+dotenv() {
+  local env_file="${1:-.env}"
+  if [[ -f "$env_file" ]]; then
+    set -o allexport
+    source "$env_file"
+    set +o allexport
+  fi
+}
+
+# Set up a Python virtual environment
+# Usage: layout python-venv [python_executable]
+layout_python-venv() {
+  local python=${1:-python3}
+  [[ $# -gt 0 ]] && shift
+  unset PYTHONHOME
+  if [[ -n $VIRTUAL_ENV ]]; then
+    VIRTUAL_ENV=$(realpath "${VIRTUAL_ENV}")
+  else
+    local python_version
+    python_version=$($python -c "import platform; print(platform.python_version())")
+    if [[ -z $python_version ]]; then
+      log_error "Could not detect Python version"
+      return 1
+    fi
+    VIRTUAL_ENV=$PWD/.direnv/python-venv-$python_version
+  fi
+  export VIRTUAL_ENV
+  if [[ ! -d $VIRTUAL_ENV ]]; then
+    log_status "Creating virtual environment..."
+    $python -m venv "$VIRTUAL_ENV"
+  fi
+  PATH_add "$VIRTUAL_ENV/bin"
+}
+
+# Set up a Node.js environment using a specific version via fnm
+# Usage: layout node [version]
+layout_node() {
+  local version="${1:-}"
+  if [[ -n "$version" ]]; then
+    if command -v fnm &>/dev/null; then
+      eval "$(fnm env --use-on-cd)"
+      fnm use "$version" || fnm use
+    elif command -v nvm &>/dev/null; then
+      nvm use "$version" || nvm use
+    fi
+  fi
+  
+  if [[ -f package.json ]]; then
+    path_add NODE_PATH "./node_modules"
+    PATH_add "node_modules/.bin"
+  fi
+}
+
+# Set up a Go environment
+# Usage: layout go
+layout_go() {
+  export GOPATH="$PWD/.direnv/go"
+  PATH_add "$GOPATH/bin"
+  mkdir -p "$GOPATH/src"
+}
+
+# Set up an AWS environment
+# Usage: use_aws [profile]
+use_aws() {
+  local profile="${1:-default}"
+  export AWS_PROFILE="$profile"
+  local aws_info=$(aws sts get-caller-identity 2>/dev/null)
+  if [[ $? -eq 0 ]]; then
+    log_status "AWS profile set to: $profile"
+    log_status "AWS Identity: $(echo "$aws_info" | grep Arn | cut -d '"' -f 4)"
+  else
+    log_error "Failed to set AWS profile: $profile"
+  fi
+}
+
+# Set up a Kubernetes environment
+# Usage: use_k8s [context]
+use_k8s() {
+  local context="${1:-}"
+  if [[ -n "$context" ]]; then
+    if kubectl config use-context "$context" &>/dev/null; then
+      log_status "Kubernetes context set to: $context"
+      export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
+    else
+      log_error "Failed to set Kubernetes context: $context"
+    fi
+  fi
+}
+
+# Set environment variables from Hashicorp Vault
+# Usage: use_vault path/to/secret [key1 key2 ...]
+use_vault() {
+  if ! command -v vault &>/dev/null; then
+    log_error "Vault CLI not found"
+    return 1
+  fi
+  
+  local secret_path="$1"
+  shift || true
+  
+  if [[ -z "$secret_path" ]]; then
+    log_error "Secret path is required"
+    return 1
+  fi
+  
+  local secret
+  secret=$(vault kv get -format=json "$secret_path" 2>/dev/null)
+  if [[ $? -ne 0 ]]; then
+    log_error "Failed to fetch secret from Vault"
+    return 1
+  fi
+  
+  if [[ $# -eq 0 ]]; then
+    # Export all keys in the secret
+    while read -r key; do
+      local value
+      value=$(echo "$secret" | jq -r ".data.data.\"$key\"")
+      if [[ "$value" != "null" ]]; then
+        export "$key"="$value"
+        log_status "Loaded $key from Vault"
+      fi
+    done < <(echo "$secret" | jq -r '.data.data | keys[]')
+  else
+    # Export only the specified keys
+    for key in "$@"; do
+      local value
+      value=$(echo "$secret" | jq -r ".data.data.\"$key\"")
+      if [[ "$value" != "null" ]]; then
+        export "$key"="$value"
+        log_status "Loaded $key from Vault"
+      else
+        log_error "Key '$key' not found in secret"
+      fi
+    done
+  fi
+}
+
+# Watch for changes in specified files and reload environment
+# Usage: watch_file_list file1 file2 ...
+watch_file_list() {
+  for file in "$@"; do
+    if [[ -f "$file" ]]; then
+      watch_file "$file"
+    fi
+  done
+}
+
+# Automatically watch common config files in project
+watch_common_configs() {
+  watch_file_list \
+    .env \
+    .env.local \
+    .env.development \
+    package.json \
+    go.mod \
+    pyproject.toml \
+    requirements.txt \
+    Pipfile
+}

@@ -1,0 +1,83 @@
+---
+# Global pre-commit configuration
+# To use in a project: 
+# 1. Install pre-commit: `brew install pre-commit`
+# 2. Copy or symlink this file to your project as `.pre-commit-config.yaml`
+# 3. Run `pre-commit install` to activate hooks in your repo
+
+repos:
+  # Basic file hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # Shell script validation
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.5
+    hooks:
+      - id: shellcheck
+        args: ["--severity=warning"]
+
+  # Python linting tools (uncomment if you use Python)
+  # - repo: https://github.com/psf/black
+  #   rev: 23.3.0
+  #   hooks:
+  #     - id: black
+  #       language_version: python3
+  
+  # - repo: https://github.com/charliermarsh/ruff-pre-commit
+  #   rev: v0.0.262
+  #   hooks:
+  #     - id: ruff
+  #       args: [--fix, --exit-non-zero-on-fix]
+
+  # Go linting (uncomment if you use Go)
+  # - repo: https://github.com/golangci/golangci-lint
+  #   rev: v1.53.3
+  #   hooks:
+  #     - id: golangci-lint
+
+  # Terraform validation (uncomment if you use Terraform)
+  # - repo: https://github.com/antonbabenko/pre-commit-terraform
+  #   rev: v1.77.1
+  #   hooks:
+  #     - id: terraform_fmt
+  #     - id: terraform_validate
+  #     - id: terraform_tflint
+
+  # JavaScript/TypeScript linting (uncomment if you use JS/TS)
+  # - repo: https://github.com/pre-commit/mirrors-eslint
+  #   rev: v8.40.0
+  #   hooks:
+  #     - id: eslint
+  #       files: \.(js|jsx|ts|tsx)$
+  #       types: [file]
+  #       additional_dependencies:
+  #         - eslint@8.40.0
+  #         - eslint-config-prettier@8.8.0
+  
+  # Markdown linting (uncomment if you want to lint markdown)
+  # - repo: https://github.com/igorshubovych/markdownlint-cli
+  #   rev: v0.34.0
+  #   hooks:
+  #     - id: markdownlint
+  
+  # Detect secrets in your codebase
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: package-lock.json|poetry.lock

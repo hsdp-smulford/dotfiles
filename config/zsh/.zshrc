@@ -91,39 +91,44 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --exclude .git"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Unified plugin list
+# Plugin list organized by category
 plugins=(
+  # Core plugins - always load these
+  direnv
+  fast-syntax-highlighting
+  fzf
+  git
+  gitignore
+  history-substring-search
+  zsh-autosuggestions
+  forgit
+
+  # DevOps tools
   ansible
   aws
   azure
-  brew
-  direnv
   docker
   docker-compose
-  fast-syntax-highlighting
-  forgit
-  fzf
   gcloud
   gh
-  git
-  gitignore
-  golang
   helm
-  history-substring-search
-  httpie
   kubectl
   kubectx
   kube-ps1
   minikube
+  terraform
+  vagrant
+
+  # Development languages and tools
+  brew
+  golang
+  httpie
   node
   npm
   pip
   python
   rust
-  terraform
-  vagrant
   virtualenv
-  zsh-autosuggestions
 )
 
 # Load Oh My Zsh
@@ -246,6 +251,7 @@ alias hap='cd $HAP'
 
 # Homebrew
 export HOMEBREW_BUNDLE_FILE="$XDG_CONFIG_HOME/brew/Brewfile"
+export HOMEBREW_BUNDLE_FILE_GLOBAL="$XDG_CONFIG_HOME/brew/Brewfile"
 export HOMEBREW_CACHE="$XDG_CACHE_HOME/homebrew"
 export HOMEBREW_LOGS="$XDG_STATE_HOME/homebrew/logs"
 
@@ -313,6 +319,18 @@ function brew-maintenance() {
 function brew-housekeeping() {
     echo "🍺 Updating Homebrew..."
     brew update
+
+    echo "🍺 Checking for differences between installed packages and Brewfile..."
+    brew bundle check --verbose --file="$HOMEBREW_BUNDLE_FILE" || {
+        echo "📦 Differences found. Would you like to install from Brewfile? (y/n)"
+        read -r response
+        if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+            echo "🍺 Installing from Brewfile..."
+            brew bundle install --file="$HOMEBREW_BUNDLE_FILE"
+        else
+            echo "⏩ Skipping Brewfile installation."
+        fi
+    }
 
     echo "🍺 Upgrading packages..."
     brew upgrade
