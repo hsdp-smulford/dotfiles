@@ -1,0 +1,62 @@
+#!/bin/bash
+# Example pre-commit hook that can be installed in your projects
+# To use: Copy to .git/hooks/pre-commit and make executable
+
+set -e
+
+# Global variables
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+ERROR_COUNT=0
+
+echo "🔍 Running pre-commit checks..."
+
+# Check if pre-commit is installed and .pre-commit-config.yaml exists
+if command -v pre-commit >/dev/null 2>&1 && [ -f .pre-commit-config.yaml ]; then
+    echo "Running pre-commit framework checks..."
+    pre-commit run --all-files
+    exit $?
+fi
+
+# If pre-commit framework is not used, run these basic checks
+
+# Function to check staged files
+check_files() {
+    local pattern=$1
+    local check_command=$2
+    local error_msg=$3
+    
+    git diff --cached --name-only | grep -E "$pattern" | while read -r file; do
+        if ! eval "$check_command \"$file\""; then
+            echo -e "${RED}$error_msg: $file${NC}"
+            ERROR_COUNT=$((ERROR_COUNT + 1))
+        fi
+    done
+}
+
+# Check for trailing whitespace
+check_files ".*" "! grep -l '[[:blank:]]$'" "Trailing whitespace found in"
+
+# Check for large files (>500kb)
+for file in $(git diff --cached --name-only); do
+    size=$(du -k "$file" | cut -f1)
+    if [ "$size" -gt 500 ]; then
+        echo -e "${YELLOW}Warning: Large file detected: $file ($size KB)${NC}"
+    fi
+done
+
+# Check shell scripts
+check_files "\.sh$" "shellcheck -e SC1090,SC1091" "Shellcheck found issues in"
+
+# Check for secrets/keys
+check_files ".*" "! grep -l -E '(secret|password|token|key).*=.*[A-Za-z0-9/+]{20,}'" "Possible secret found in"
+
+# Exit with error if any checks failed
+if [ "$ERROR_COUNT" -gt 0 ]; then
+    echo -e "${RED}❌ Pre-commit checks failed with $ERROR_COUNT errors${NC}"
+    exit 1
+else
+    echo -e "${GREEN}✅ All pre-commit checks passed${NC}"
+fi
