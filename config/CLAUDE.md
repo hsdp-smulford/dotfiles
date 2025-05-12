@@ -33,6 +33,28 @@ brew-housekeeping
 git config --get-regexp alias
 ```
 
+## Development Commands
+
+- **Linting**: `shellcheck` for shell scripts, `yamllint` for YAML
+- **Formatting**:
+  - Lua: `stylua` (2-space indent)
+  - JS/TS: `prettier` (single quotes)
+  - Python: `black -l 88`
+  - Shell: `shfmt -i 2 -ci`
+  - Go: `gofmt`
+- **Testing**: `bats-core` for shell script testing
+
+## Code Style Guidelines
+
+- **Indentation**: 2 spaces for most languages
+- **Line Length**: 88 chars for Python, 100 chars for others
+- **Quotes**: Single quotes for JS/TS/JSX
+- **Naming**: Use descriptive names with appropriate case for each language
+- **Imports**: Group and sort imports by standard library, third-party, local
+- **Error Handling**: Always check command exit codes in shell scripts
+- **Whitespace**: No trailing whitespace, files end with newline
+- **Comments**: Document "why" not "what" - code should be self-explanatory
+
 ## Configuration Architecture
 
 ### XDG Base Directory Structure
@@ -51,24 +73,29 @@ git config --get-regexp alias
 ### Key Configuration Areas
 
 1. **Zsh**: Extensive shell configuration with plugins, themes, and custom functions
+
    - Uses Oh My Zsh with Powerlevel10k theme
    - Contains aliases and functions for DevOps workflows
 
 2. **Git**: Configured with separate personal and work profiles
+
    - Includes custom aliases and commit template
    - Automatically detects work vs. personal repositories
 
 3. **Homebrew**: Package management
+
    - Brewfile tracks installed packages
    - Installation and backup scripts available
    - brew-housekeeping function for comprehensive maintenance
 
 4. **Claude Code**: Configuration for Claude Code CLI
+
    - Custom model configuration
    - API key management via 1Password
    - DevOps-focused rule sets
 
 5. **K9s**: Kubernetes CLI dashboard configuration
+
    - Custom UI settings and resource monitoring thresholds
 
 6. **Neovim**: Text editor configuration
@@ -99,3 +126,7 @@ git config --get-regexp alias
 - Custom rules for IaC validation, container security, and language best practices
 - Configuration optimized for Python, Go, Terraform, and Kubernetes workflows
 - Aliases defined for common Claude Code commands
+
+## Repository Structure
+
+This repository contains dotfiles configurations for various developer tools and environments, focusing on DevOps workflows and modern development practices.
