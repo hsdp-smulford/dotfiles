@@ -141,7 +141,7 @@ source ${XDG_DATA_HOME}/powerlevel10k/powerlevel10k.zsh-theme
 # Tool Completions
 source <(kubectl completion zsh)
 complete -F __start_kubectl k
-complete -C '/usr/local/bin/aws_completer' aws
+complete -C '/opt/homebrew/bin/aws_completer' aws
 
 # DevOps/Container aliases
 alias k='kubectl'
@@ -177,9 +177,11 @@ alias dcl='docker compose logs -f'
 alias dcps='docker compose ps'
 
 # AWS aliases
-alias aws-whoami='aws sts get-caller-identity'
+#export AWS_CLI_AUTO_PROMPT=on
+export AWS_DEFAULT_OUTPUT=json
 export AWS_PAGER=
 export AWS_DEFAULT_REGION=us-east-1
+export AWS_COLOR=on
 
 # Terraform aliases
 alias t='terraform'
