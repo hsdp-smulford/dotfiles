@@ -26,7 +26,7 @@ setopt HIST_VERIFY
 setopt SHARE_HISTORY
 setopt HIST_SAVE_NO_DUPS
 
-# Modern completion system
+# completion system
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' completer _expand _complete _ignored _approximate
@@ -69,7 +69,7 @@ export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm"
 export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
 export PATH="$XDG_DATA_HOME/npm/bin:$PATH"
 
-# Modern environment variables
+# environment variables
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 export EDITOR='nvim'
@@ -91,9 +91,8 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --exclude .git"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Plugin list organized by category
+# Plugin list
 plugins=(
-  # Core plugins - always load these
   direnv
   fast-syntax-highlighting
   fzf
@@ -143,7 +142,7 @@ source <(kubectl completion zsh)
 complete -F __start_kubectl k
 complete -C '/opt/homebrew/bin/aws_completer' aws
 
-# DevOps/Container aliases
+# k8s aliases
 alias k='kubectl'
 alias kns='kubens'
 alias kn='kubens'
@@ -193,7 +192,7 @@ alias tfd='terraform destroy'
 alias tff='terraform fmt -recursive'
 alias tfv='terraform validate'
 
-# Modern CLI replacements
+# CLI replacements
 alias cat='bat'
 alias du='dust'
 alias find='fd'
@@ -249,7 +248,13 @@ export INFRA=~/hap/infra
 export HAP=~/hap/hsp-aws-platform
 export PLAY=~/hap/playground
 export VPC=~/hap/terraform-vpc
+alias addons='cd $ADDONS'
+alias common='cd $COMMON'
+alias eks='cd $EKS'
+alias infra='cd $INFRA'
 alias hap='cd $HAP'
+alias play='cd $PLAY'
+alias vpc='cd $VPC'
 
 # Homebrew
 export HOMEBREW_BUNDLE_FILE="$XDG_CONFIG_HOME/brew/Brewfile"
@@ -444,10 +449,10 @@ alias zshrc='$EDITOR ${ZDOTDIR}/.zshrc'
 # Housekeeping
 alias docker-clean='docker system prune -af'
 
-# Initialize modern tools
+# tool initialization
 eval "$(direnv hook zsh)"
-eval "$(atuin init zsh)"  # Modern shell history
-eval "$(zoxide init zsh)" # Modern directory jumping
+eval "$(atuin init zsh)"
+eval "$(zoxide init zsh)"
 eval "$(thefuck --alias)"
 
 # Key bindings
@@ -496,13 +501,13 @@ function aws-ssh() {
   fi
 }
 
-# Fun terminal enhancements
+# terminal enhancements
 alias rainbow='lolcat'
 alias yolo='git add . && git commit -m "$(curl -s https://whatthecommit.com/index.txt)" && git push'
 alias matrix='cmatrix -s -b'
 alias pipes='pipes.sh'
 
-# Start terminal with a random colorful header
+# Start terminal with a random header
 function header() {
   figlet -f "$(find /usr/local/share/figlet/fonts -name "*.flf" | sort -R | head -1)" "$(hostname)" | lolcat
 }
