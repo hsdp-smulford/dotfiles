@@ -313,46 +313,117 @@ function weather() {
 kube-pods() { kubectl get pods --all-namespaces | grep -i "$1"; }
 aws-instances() { aws ec2 describe-instances --query 'Reservations[].Instances[].[Tags[?Key==`Name`].Value | [0], InstanceId, State.Name, PrivateIpAddress]' --output table; }
 
-# Brew maintenance (both names for compatibility)
-function brew-maintenance() {
-    brew-housekeeping
-}
-
 function brew-housekeeping() {
-    echo "🍺 Updating Homebrew..."
-    brew update
-
-    echo "🍺 Checking for differences between installed packages and Brewfile..."
-    brew bundle check --verbose --file="$HOMEBREW_BUNDLE_FILE" || {
-        echo "📦 Differences found. Would you like to install from Brewfile? (y/n)"
-        read -r response
-        if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-            echo "🍺 Installing from Brewfile..."
-            brew bundle install --file="$HOMEBREW_BUNDLE_FILE"
+    # Default settings
+    local SKIP_DOCTOR=false
+    local SKIP_BREWFILE_UPDATE=false
+    local VERBOSE=false
+    local START_TIME=$(date +%s)
+    
+    # Colors
+    local GREEN='\033[0;32m'
+    local YELLOW='\033[0;33m'
+    local BLUE='\033[0;34m'
+    local RED='\033[0;31m'
+    local NC='\033[0m' # No Color
+    
+    # Parse arguments
+    while [[ "$#" -gt 0 ]]; do
+        case $1 in
+            --skip-doctor) SKIP_DOCTOR=true ;;
+            --skip-brewfile-update) SKIP_BREWFILE_UPDATE=true ;;
+            --verbose) VERBOSE=true ;;
+            --help) 
+                echo -e "${BLUE}Homebrew Housekeeping${NC}"
+                echo "Usage: brew-housekeeping [options]"
+                echo ""
+                echo "Options:"
+                echo "  --skip-doctor             Skip 'brew doctor' checks"
+                echo "  --skip-brewfile-update    Skip updating the Brewfile"
+                echo "  --verbose                 Show detailed output"
+                echo "  --help                    Show this help message"
+                return 0
+                ;;
+            *) echo "Unknown parameter: $1"; return 1 ;;
+        esac
+        shift
+    done
+    
+    # Suppress non-critical warnings
+    export HOMEBREW_NO_ENV_HINTS=1
+    
+    # Ensure we have a Brewfile location
+    if [[ -z "$HOMEBREW_BUNDLE_FILE" ]]; then
+        if [[ -f "$HOME/.config/brew/Brewfile" ]]; then
+            export HOMEBREW_BUNDLE_FILE="$HOME/.config/brew/Brewfile"
         else
-            echo "⏩ Skipping Brewfile installation."
+            export HOMEBREW_BUNDLE_FILE="$HOME/Brewfile"
         fi
-    }
-
-    echo "🍺 Upgrading packages..."
+        echo -e "${YELLOW}ℹ️  Using Brewfile at: ${HOMEBREW_BUNDLE_FILE}${NC}"
+    fi
+    
+    echo -e "${GREEN}🔄 Updating Homebrew...${NC}"
+    brew update
+    
+    echo -e "${GREEN}📋 Checking for differences between installed packages and Brewfile...${NC}"
+    if $VERBOSE; then
+        brew bundle check --verbose --file="$HOMEBREW_BUNDLE_FILE" || {
+            echo -e "${YELLOW}📦 Differences found. Would you like to install from Brewfile? (y/n)${NC}"
+            read -r response
+            if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+                echo -e "${GREEN}📥 Installing from Brewfile...${NC}"
+                brew bundle install --file="$HOMEBREW_BUNDLE_FILE"
+            else
+                echo -e "${BLUE}⏩ Skipping Brewfile installation.${NC}"
+            fi
+        }
+    else
+        brew bundle check --file="$HOMEBREW_BUNDLE_FILE" &>/dev/null || {
+            echo -e "${YELLOW}📦 Differences found. Would you like to install from Brewfile? (y/n)${NC}"
+            read -r response
+            if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+                echo -e "${GREEN}📥 Installing from Brewfile...${NC}"
+                brew bundle install --file="$HOMEBREW_BUNDLE_FILE"
+            else
+                echo -e "${BLUE}⏩ Skipping Brewfile installation.${NC}"
+            fi
+        }
+    fi
+    
+    echo -e "${GREEN}⬆️  Upgrading packages...${NC}"
     brew upgrade
-
-    echo "🍺 Cleaning up..."
+    
+    echo -e "${GREEN}🧹 Cleaning up...${NC}"
     brew cleanup -s
-
-    echo "🍺 Removing dead symlinks..."
+    
+    echo -e "${GREEN}🔗 Removing dead symlinks...${NC}"
     brew cleanup --prune=all
-
-    echo "🍺 Running doctor..."
-    brew doctor
-
-    echo "🍺 Checking for missing dependencies..."
+    
+    if ! $SKIP_DOCTOR; then
+        echo -e "${GREEN}🩺 Running doctor...${NC}"
+        brew doctor 2>&1 | grep -v "No Cask quarantine support available"
+    else
+        echo -e "${BLUE}⏩ Skipping brew doctor check.${NC}"
+    fi
+    
+    echo -e "${GREEN}🔍 Checking for missing dependencies...${NC}"
     brew missing
-
-    echo "🍺 Updating Brewfile..."
-    brew bundle dump --force --file="$HOMEBREW_BUNDLE_FILE"
-
-    echo "✨ Brew maintenance complete!"
+    
+    if ! $SKIP_BREWFILE_UPDATE; then
+        echo -e "${GREEN}💾 Updating Brewfile...${NC}"
+        brew bundle dump --force --file="$HOMEBREW_BUNDLE_FILE"
+    else
+        echo -e "${BLUE}⏩ Skipping Brewfile update.${NC}"
+    fi
+    
+    # Calculate execution time
+    local END_TIME=$(date +%s)
+    local DURATION=$((END_TIME - START_TIME))
+    
+    echo -e "${GREEN}✨ Brew maintenance complete in ${DURATION}s!${NC}"
+    
+    # Unset environment variable
+    unset HOMEBREW_NO_ENV_HINTS
 }
 
 # Utility aliases
