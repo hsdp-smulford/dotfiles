@@ -95,5 +95,11 @@ config/git/config.local
 **/*.local
 **/*.local.*
 
+# ArgoCD specific files
+config/argocd/config
+config/argocd/cluster-*
+config/argocd/certs/
+config/argocd/token
+
 # Community files that should be downloaded instead of versioned
 config/cheat/cheatsheets/community/
