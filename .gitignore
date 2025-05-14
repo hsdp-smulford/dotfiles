@@ -103,3 +103,6 @@ config/argocd/token
 
 # Community files that should be downloaded instead of versioned
 config/cheat/cheatsheets/community/
+
+config/colima/_*
+config/wtf/log.txt
