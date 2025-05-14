@@ -71,5 +71,12 @@
     "cache_ttl": 3600,
     "concurrent_operations": 4,
     "memory_limit_mb": 1024
+  },
+  "terminal": {
+    "copy_on_select": true,
+    "auto_copy_selection": true,
+    "strip_ansi_colors": true,
+    "mouse_support": true,
+    "clipboard_integration": true
   }
 }
