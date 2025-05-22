@@ -1,0 +1,39 @@
+files:
+  # Core Claude configuration file - always load
+  - path: ~/.config/claude/CLAUDE.md
+    always_load: true
+    description: "Core Claude personalization with Philly themes"
+
+  # Project-specific configurations
+  - path: ~/hap/hsp-aws-platform/CLAUDE.md
+    context_matches: ["hap", "aws", "platform"]
+    description: "HAP project-specific context"
+
+  # Technical context files
+  - path: ~/.config/claude/contexts/aws.md
+    context_matches: ["aws", "cloud", "terraform"]
+    description: "AWS technical context"
+
+  - path: ~/.config/claude/contexts/kubernetes.md
+    context_matches: ["kubernetes", "k8s", "eks"]
+    description: "Kubernetes technical context"
+
+# Project lookup paths
+lookup_paths:
+  - "~/dev/**/CLAUDE.md"
+  - "~/hap/**/CLAUDE.md"
+
+# Memory settings
+settings:
+  max_tokens_per_file: 10000
+  default_ttl: 30d
+  prioritize_recent: true
+
+# Model settings that should persist on the web
+model_preferences:
+  style: "philly"
+  tone: "friendly_technical"
+  verbosity: "concise"
+  format_code: true
+  technical_level: "expert"
+

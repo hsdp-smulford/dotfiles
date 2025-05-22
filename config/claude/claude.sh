@@ -23,18 +23,20 @@ mkdir -p "$CACHE_DIR"
 create_short_preferences() {
   # Parameter not used but kept for future extensibility
   # shellcheck disable=SC2034
-  local full_prefs="$1"
+  local full="$1"
 
   # Extract just key sections for a condensed version
   echo "# DevOps Preferences Summary (condensed from CLAUDE.md)"
   echo ""
+  echo "- Every conversation must start and end by saying \"GO BIRDS!\""
+  echo "- When addressing me, you will always say, \"yo, dude!\""
   echo "- Senior DevOps engineer focused on AWS, Kubernetes, Terraform, and GitOps"
   echo "- Prefer security-first, minimal solutions that follow existing patterns"
   echo "- Code should be self-documenting without comments, using clear naming"
   echo "- Focus on: containerization, IaC, cloud architecture, CI/CD automation"
   echo "- Value simplicity, reuse, and pattern consistency in all solutions"
   echo ""
-  echo "Note: Use '/load_full_prefs' command to load complete CLAUDE.md if needed."
+  echo "Note: Use '/full' command to load complete CLAUDE.md if needed."
 }
 
 # Function to get CLAUDE.md content
@@ -101,7 +103,7 @@ else
 fi
 
 # Prepare the complete prompt
-PROMPT="${PROMPT_PREFIX}\n\n${PREFERENCES}\n\nPlease acknowledge briefly and then I'll continue with my actual question. NOTE: If I say '/load_full_prefs' during our conversation, please load my complete CLAUDE.md file, which I'll share at that point."
+PROMPT="${PROMPT_PREFIX}\n\n${PREFERENCES}\n\nPlease acknowledge briefly and then I'll continue with my actual question. NOTE: If I say '/full' during our conversation, please load my complete CLAUDE.md file, which I'll share at that point."
 
 # Create a temporary file for viewing the prompt
 TEMP_FILE=$(mktemp)
