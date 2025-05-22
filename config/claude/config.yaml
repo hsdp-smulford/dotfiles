@@ -13,7 +13,7 @@ model:
   name: "claude-3-7-sonnet-20250219"
   context_window: 200000
   fallback_model: "claude-3-5-sonnet-20240620"
-  
+
 # API Configuration
 api:
   url: "https://api.anthropic.com/v1"
@@ -56,4 +56,3 @@ aliases:
   "s": "claude-code security-scan"
   "tf": "claude-code terraform-analyze"
   "k8s": "claude-code k8s-validate"
-

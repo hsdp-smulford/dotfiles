@@ -12,7 +12,7 @@ rules:
           - "Proper error handling"
           - "State management best practices"
           - "Resource tagging consistency"
-    
+
   - name: "container_security"
     description: "Container security patterns"
     enabled: true
@@ -24,7 +24,7 @@ rules:
           - "Minimal base images"
           - "Up-to-date dependencies"
           - "Secret management"
-  
+
   - name: "golang"
     description: "Go best practices"
     enabled: true
@@ -61,7 +61,7 @@ rules:
           - "Conditional steps"
           - "Resource optimization"
           - "Security scanning integration"
-  
+
   - name: "k8s"
     description: "K8s manifest best practices"
     enabled: true

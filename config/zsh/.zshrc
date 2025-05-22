@@ -1,5 +1,8 @@
+#!/bin/zsh
 # Enable Powerlevel10k instant prompt
+# shellcheck disable=SC2296
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  # shellcheck disable=SC1090
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
@@ -30,6 +33,7 @@ setopt HIST_SAVE_NO_DUPS
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' completer _expand _complete _ignored _approximate
+# shellcheck disable=SC2296
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 autoload -Uz compinit && compinit -d "${XDG_CACHE_HOME}/zsh/zcompdump-${ZSH_VERSION}"
 zmodload zsh/complist
@@ -81,14 +85,17 @@ export BAT_PAGING="never"
 export BAT_STYLE="plain"
 
 # Anthropic/claude cli
-export CLAUDE_CODE_CONFIG_HOME="$XDG_CONFIG_HOME/claude-code"
+export CLAUDE_CONFIG_HOME="$XDG_CONFIG_HOME/claude"
+export CLAUDE_CODE_CONFIG_HOME="$CLAUDE_CONFIG_HOME"
 
 # FZF Configuration
-export FZF_BASE="$(brew --prefix)/opt/fzf"
+FZF_BASE=$(brew --prefix)/opt/fzf
+export FZF_BASE
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --exclude .git"
+# shellcheck disable=SC1090
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Plugin list
@@ -138,6 +145,7 @@ source ${XDG_DATA_HOME}/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ${ZDOTDIR}/.p10k.zsh ]] || source ${ZDOTDIR}/.p10k.zsh
 
 # Tool Completions
+# shellcheck disable=SC1090
 source <(kubectl completion zsh)
 complete -F __start_kubectl k
 complete -C '/opt/homebrew/bin/aws_completer' aws
@@ -206,6 +214,10 @@ alias vi='nvim'
 alias vim='nvim'
 alias ff='fastfetch'
 
+# Claude AI aliases
+alias claude='${CLAUDE_CONFIG_HOME}/claude.sh'
+alias claude-full='${CLAUDE_CONFIG_HOME}/claude.sh --full'
+
 # Git aliases
 alias g='git'
 alias gst='git status -sb'
@@ -264,10 +276,11 @@ export HOMEBREW_LOGS="$XDG_STATE_HOME/homebrew/logs"
 
 ## Needed for 1password ssh keys
 #SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
-export GPG_TTY=$(tty)
+GPG_TTY=$(tty)
+export GPG_TTY
 
 # Utility functions
-function mkcd() { mkdir -p "$@" && cd "$@"; }
+function mkcd() { mkdir -p "$@" && cd "$@" || return; }
 
 function extract() {
    if [ -f $1 ] ; then
@@ -314,6 +327,42 @@ function weather() {
     curl "wttr.in/${1:-}"
 }
 
+# Claude setup function - ADDED
+function claude-setup() {
+  echo "Setting up Claude configuration..."
+  mkdir -p "$CLAUDE_CONFIG_HOME"
+  mkdir -p "$XDG_CACHE_HOME/claude"
+
+  # Migrate claude-code if needed
+  if [[ -d "$XDG_CONFIG_HOME/claude-code" && ! -d "$CLAUDE_CONFIG_HOME/code" ]]; then
+    echo "Migrating claude-code → claude/code..."
+    mkdir -p "$CLAUDE_CONFIG_HOME/code"
+    cp -R "$XDG_CONFIG_HOME/claude-code/"* "$CLAUDE_CONFIG_HOME/code/"
+    echo "Migration complete. You can remove $XDG_CONFIG_HOME/claude-code after verifying."
+  fi
+
+  # Check if the claude.sh script exists
+  if [[ ! -f "$CLAUDE_CONFIG_HOME/claude.sh" ]]; then
+    echo "Creating claude.sh script..."
+    # If you have it locally
+    cp ~/Downloads/claude.sh "$CLAUDE_CONFIG_HOME/claude.sh"
+    chmod +x "$CLAUDE_CONFIG_HOME/claude.sh"
+  else
+    echo "claude.sh script already exists."
+  fi
+
+  # Check if CLAUDE.md exists
+  if [[ ! -f "$CLAUDE_CONFIG_HOME/CLAUDE.md" ]]; then
+    echo "Creating CLAUDE.md preferences file..."
+    # If you have it locally
+    cp ~/Downloads/Integrated\ CLAUDE.md "$CLAUDE_CONFIG_HOME/CLAUDE.md"
+  else
+    echo "CLAUDE.md already exists."
+  fi
+
+  echo "Claude configuration setup complete!"
+}
+
 # Custom functions for DevOps
 kube-pods() { kubectl get pods --all-namespaces | grep -i "$1"; }
 aws-instances() { aws ec2 describe-instances --query 'Reservations[].Instances[].[Tags[?Key==`Name`].Value | [0], InstanceId, State.Name, PrivateIpAddress]' --output table; }
@@ -323,22 +372,23 @@ function brew-housekeeping() {
     local SKIP_DOCTOR=false
     local SKIP_BREWFILE_UPDATE=false
     local VERBOSE=false
-    local START_TIME=$(date +%s)
-    
+    local START_TIME
+    START_TIME=$(date +%s)
+
     # Colors
     local GREEN='\033[0;32m'
     local YELLOW='\033[0;33m'
     local BLUE='\033[0;34m'
     local RED='\033[0;31m'
     local NC='\033[0m' # No Color
-    
+
     # Parse arguments
     while [[ "$#" -gt 0 ]]; do
         case $1 in
             --skip-doctor) SKIP_DOCTOR=true ;;
             --skip-brewfile-update) SKIP_BREWFILE_UPDATE=true ;;
             --verbose) VERBOSE=true ;;
-            --help) 
+            --help)
                 echo -e "${BLUE}Homebrew Housekeeping${NC}"
                 echo "Usage: brew-housekeeping [options]"
                 echo ""
@@ -353,10 +403,10 @@ function brew-housekeeping() {
         esac
         shift
     done
-    
+
     # Suppress non-critical warnings
     export HOMEBREW_NO_ENV_HINTS=1
-    
+
     # Ensure we have a Brewfile location
     if [[ -z "$HOMEBREW_BUNDLE_FILE" ]]; then
         if [[ -f "$HOME/.config/brew/Brewfile" ]]; then
@@ -366,10 +416,10 @@ function brew-housekeeping() {
         fi
         echo -e "${YELLOW}ℹ️  Using Brewfile at: ${HOMEBREW_BUNDLE_FILE}${NC}"
     fi
-    
+
     echo -e "${GREEN}🔄 Updating Homebrew...${NC}"
     brew update
-    
+
     echo -e "${GREEN}📋 Checking for differences between installed packages and Brewfile...${NC}"
     if $VERBOSE; then
         brew bundle check --verbose --file="$HOMEBREW_BUNDLE_FILE" || {
@@ -394,39 +444,40 @@ function brew-housekeeping() {
             fi
         }
     fi
-    
+
     echo -e "${GREEN}⬆️  Upgrading packages...${NC}"
     brew upgrade
-    
+
     echo -e "${GREEN}🧹 Cleaning up...${NC}"
     brew cleanup -s
-    
+
     echo -e "${GREEN}🔗 Removing dead symlinks...${NC}"
     brew cleanup --prune=all
-    
+
     if ! $SKIP_DOCTOR; then
         echo -e "${GREEN}🩺 Running doctor...${NC}"
         brew doctor 2>&1 | grep -v "No Cask quarantine support available"
     else
         echo -e "${BLUE}⏩ Skipping brew doctor check.${NC}"
     fi
-    
+
     echo -e "${GREEN}🔍 Checking for missing dependencies...${NC}"
     brew missing
-    
+
     if ! $SKIP_BREWFILE_UPDATE; then
         echo -e "${GREEN}💾 Updating Brewfile...${NC}"
         brew bundle dump --force --file="$HOMEBREW_BUNDLE_FILE"
     else
         echo -e "${BLUE}⏩ Skipping Brewfile update.${NC}"
     fi
-    
+
     # Calculate execution time
-    local END_TIME=$(date +%s)
+    local END_TIME
+    END_TIME=$(date +%s)
     local DURATION=$((END_TIME - START_TIME))
-    
+
     echo -e "${GREEN}✨ Brew maintenance complete in ${DURATION}s!${NC}"
-    
+
     # Unset environment variable
     unset HOMEBREW_NO_ENV_HINTS
 }
@@ -468,7 +519,8 @@ alias yqj='yq -j' # JSON output
 
 # Enhanced AWS profile selection with preview
 function awsp() {
-  local profile=$(aws configure list-profiles | fzf --preview 'aws sts get-caller-identity --profile {} 2>/dev/null || echo "Not authenticated"')
+  local profile
+  profile=$(aws configure list-profiles | fzf --preview 'aws sts get-caller-identity --profile {} 2>/dev/null || echo "Not authenticated"')
   if [[ -n $profile ]]; then
     export AWS_PROFILE=$profile
     echo "AWS profile set to: $profile"
@@ -477,7 +529,8 @@ function awsp() {
 
 # Enhanced kubectx with preview
 function kctxf() {
-  local context=$(kubectx | fzf --preview 'kubectl config get-contexts {} | head -n 1; echo "\nNodes:"; kubectl get nodes --context {} 2>/dev/null')
+  local context
+  context=$(kubectx | fzf --preview 'kubectl config get-contexts {} | head -n 1; echo "\nNodes:"; kubectl get nodes --context {} 2>/dev/null')
   if [[ -n $context ]]; then
     kubectx $context
   fi
@@ -488,13 +541,14 @@ function hcd() {
   local dir
   dir=$(find ~/hap -type d -maxdepth 2 | fzf)
   if [[ -n $dir ]]; then
-    cd "$dir"
+    cd "$dir" || return
   fi
 }
 
 # AWS enhanced functions
 function aws-ssh() {
-  local instance=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[InstanceId,Tags[?Key==`Name`].Value|[0],State.Name,PrivateIpAddress]' --output text | grep running | fzf | awk '{print $1}')
+  local instance
+  instance=$(aws ec2 describe-instances --query 'Reservations[].Instances[].[InstanceId,Tags[?Key==`Name`].Value|[0],State.Name,PrivateIpAddress]' --output text | grep running | fzf | awk '{print $1}')
   if [[ -n $instance ]]; then
     echo "Connecting to $instance..."
     aws ssm start-session --target $instance

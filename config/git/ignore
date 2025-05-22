@@ -216,3 +216,5 @@ Gemfile.lock
 .zsh_history
 .ash_history
 .config/gh/hosts.yml
+
+**/.claude/settings.local.json

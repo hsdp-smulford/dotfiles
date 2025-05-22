@@ -15,10 +15,10 @@ if [ $OP_STATUS -ne 0 ]; then
     # Try silent login with 1Password CLI biometric auth first
     op signin --account my.1password.com > /dev/null 2>&1
     OP_STATUS=$?
-    
+
     # If silent login fails, try interactive
     if [ $OP_STATUS -ne 0 ]; then
-        eval $(op signin)
+        eval "$(op signin)"
     fi
 fi
 

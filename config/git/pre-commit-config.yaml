@@ -1,6 +1,6 @@
 ---
 # Global pre-commit configuration
-# To use in a project: 
+# To use in a project:
 # 1. Install pre-commit: `brew install pre-commit`
 # 2. Copy or symlink this file to your project as `.pre-commit-config.yaml`
 # 3. Run `pre-commit install` to activate hooks in your repo
@@ -29,6 +29,7 @@ repos:
     hooks:
       - id: shellcheck
         args: ["--severity=warning"]
+        exclude: config/zsh/\.zshrc
 
   # Python linting tools (uncomment if you use Python)
   # - repo: https://github.com/psf/black
@@ -36,7 +37,7 @@ repos:
   #   hooks:
   #     - id: black
   #       language_version: python3
-  
+
   # - repo: https://github.com/charliermarsh/ruff-pre-commit
   #   rev: v0.0.262
   #   hooks:
@@ -67,13 +68,13 @@ repos:
   #       additional_dependencies:
   #         - eslint@8.40.0
   #         - eslint-config-prettier@8.8.0
-  
+
   # Markdown linting (uncomment if you want to lint markdown)
   # - repo: https://github.com/igorshubovych/markdownlint-cli
   #   rev: v0.34.0
   #   hooks:
   #     - id: markdownlint
-  
+
   # Detect secrets in your codebase
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.4.0
