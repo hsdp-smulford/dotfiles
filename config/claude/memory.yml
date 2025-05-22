@@ -36,4 +36,3 @@ model_preferences:
   verbosity: "concise"
   format_code: true
   technical_level: "expert"
-

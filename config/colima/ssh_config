@@ -18,4 +18,3 @@ Host colima
   ControlPersist yes
   Hostname 127.0.0.1
   Port 54042
-
