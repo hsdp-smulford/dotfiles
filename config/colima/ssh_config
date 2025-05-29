@@ -16,5 +16,6 @@ Host colima
   ControlMaster auto
   ControlPath "/Users/shawn/dev/dotfiles/config/colima/_lima/colima/ssh.sock"
   ControlPersist yes
+  ForwardAgent yes
   Hostname 127.0.0.1
-  Port 54042
+  Port 61886

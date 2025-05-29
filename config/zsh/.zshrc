@@ -14,10 +14,6 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_AI_HOME="$XDG_CONFIG_HOME/ai"
 
-# ssh
-eval `keychain --eval ssh --ssh-allow-forwarded ~/.ssh/id_ed25519_sft`
-
-
 # Oh My Zsh Configuration
 export ZSH="${XDG_DATA_HOME}/oh-my-zsh"
 ZSH_CUSTOM="$ZSH/custom"
@@ -113,6 +109,7 @@ plugins=(
   history-substring-search
   zsh-autosuggestions
   forgit
+  keychain
 
   # DevOps tools
   ansible
@@ -141,6 +138,8 @@ plugins=(
   rust
   virtualenv
 )
+
+zstyle :omz:plugins:keychain identities id_ed25519_hsp
 
 # Load Oh My Zsh
 source $ZSH/oh-my-zsh.sh

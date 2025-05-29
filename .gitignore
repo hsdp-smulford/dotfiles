@@ -1,3 +1,7 @@
+# config specific
+config/ngrok/ngrok.yml
+config/colima/default/daemon/daemon.pid
+
 # macOS system files
 .DS_Store
 .AppleDouble
