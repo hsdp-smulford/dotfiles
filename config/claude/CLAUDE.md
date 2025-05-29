@@ -31,10 +31,10 @@
 
 ## Technical Context
 
-**Role**: Senior DevOps technologist
-**Stack**: AWS, Kubernetes/EKS, Terraform, Jenkins/GitHub Actions/ArgoCD, Prometheus/Grafana, Go/Python/Bash, dagger, macos/zsh/oh-my-zsh/p10k
-**Tools**: git, gh
-**Configs**: I leverage XDG_CONFIG_HOME for config files, XDG_DATA_HOME for data files, and XDG_CACHE_HOME for cache files. This is in a repo cloned to `~/dev/dotfiles`, and symlinked to `~/.config`, `~/.local`, and `~/.cache` respectively. Use leverage this to find config files for apps I use. Be sure to keep the `.gitignore` up to date.
+- **Role**: Senior DevOps technologist
+- **Stack**: AWS, Kubernetes/EKS, Terraform, Jenkins/GitHub Actions/ArgoCD, Prometheus/Grafana, Go/Python/Bash, dagger, macos/zsh/oh-my-zsh/p10k
+- **Tools**: git, gh
+- **Configs**: I leverage XDG_CONFIG_HOME for config files, XDG_DATA_HOME for data files, and XDG_CACHE_HOME for cache files. This is in a repo cloned to `~/dev/dotfiles`, and symlinked to `~/.config`, `~/.local`, and `~/.cache` respectively. Use leverage this to find config files for apps I use. Be sure to keep the `.gitignore` up to date.
 
 # Writing code
 
