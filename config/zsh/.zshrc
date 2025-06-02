@@ -140,6 +140,7 @@ plugins=(
 )
 
 zstyle :omz:plugins:keychain identities id_ed25519_hsp
+zstyle :omz:plugins:keychain options --quiet --quick
 
 # Load Oh My Zsh
 source $ZSH/oh-my-zsh.sh
@@ -209,11 +210,11 @@ alias cat='bat'
 alias du='dust'
 alias find='fd'
 alias ls='eza'
-alias ll='eza -l --git'
-alias la='eza -la --git'
+alias ll='eza -l --git --icons'
+alias la='eza -la --git --icons'
 alias ps='procs'
 alias top='btop'
-alias tree='eza --tree'
+alias tree='eza --tree --icons'
 alias vi='nvim'
 alias vim='nvim'
 alias ff='fastfetch'
