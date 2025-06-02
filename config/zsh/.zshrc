@@ -223,56 +223,6 @@ if [[ -z "$ANTHROPIC_API_KEY" ]]; then
     export ANTHROPIC_API_KEY=$(keybase fs read keybase://private/jerseyshawn/secrets/anthropic/api_key)
 fi
 
-# Main AI command - unified interface
-# alias ai='$XDG_AI_HOME/ai.sh'
-
-# # Provider-specific shortcuts
-# alias claude='$XDG_AI_HOME/ai.sh claude'
-# alias claude-full='$XDG_AI_HOME/ai.sh claude --full'
-# alias openai='$XDG_AI_HOME/ai.sh openai'
-# alias openai-full='$XDG_AI_HOME/ai.sh openai --full'
-# alias perplexity='$XDG_AI_HOME/ai.sh perplexity'
-# alias perplexity-full='$XDG_AI_HOME/ai.sh perplexity --full'
-# alias gemini='$XDG_AI_HOME/ai.sh gemini'
-# alias gemini-full='$XDG_AI_HOME/ai.sh gemini --full'
-
-# # Context shortcuts
-# alias ai-python='$XDG_AI_HOME/ai.sh --context python'
-# alias ai-go='$XDG_AI_HOME/ai.sh --context golang'
-# alias ai-github='$XDG_AI_HOME/ai.sh --context github'
-# alias ai-k8s='$XDG_AI_HOME/ai.sh --context kubernetes'
-# alias ai-aws='$XDG_AI_HOME/ai.sh --context aws'
-
-# # Task-specific shortcuts
-# alias ai-dev='$XDG_AI_HOME/ai.sh claude --full'
-# alias ai-research='$XDG_AI_HOME/ai.sh perplexity --full'
-# alias ai-image='$XDG_AI_HOME/ai.sh gemini'
-
-# # Model management
-# alias model-manager='$XDG_AI_HOME/scripts/model_manager.sh'
-
-# # API key management
-# ai-keys() {
-#   echo "Testing API key access for all providers..."
-#   for provider in claude openai perplexity gemini; do
-#     echo -n "Testing $provider: "
-#     key=$("$XDG_AI_HOME/scripts/get_${provider}_key.sh" 2>/dev/null)
-#     if [[ -n "$key" ]]; then
-#       echo "✅ API key available"
-#     else
-#       echo "❌ API key not found"
-#     fi
-#   done
-# }
-
-# # Cache management
-# ai-clear-cache() {
-#   echo "Clearing AI provider session caches..."
-#   rm -rf "$XDG_CACHE_HOME/ai/"*
-#   mkdir -p "$XDG_CACHE_HOME/ai/claude" "$XDG_CACHE_HOME/ai/openai" "$XDG_CACHE_HOME/ai/perplexity" "$XDG_CACHE_HOME/ai/gemini"
-#   echo "Cache cleared successfully."
-# }
-
 # Git aliases
 alias g='git'
 alias gst='git status -sb'
@@ -332,8 +282,13 @@ export HOMEBREW_BUNDLE_FILE_GLOBAL="$XDG_CONFIG_HOME/brew/Brewfile"
 export HOMEBREW_CACHE="$XDG_CACHE_HOME/homebrew"
 export HOMEBREW_LOGS="$XDG_STATE_HOME/homebrew/logs"
 
+# common brew commands
+alias bi='brew install && echo "🍺 Updating Brewfile..." && brew bundle dump --force --file="$HOMEBREW_BUNDLE_FILE" && echo "✅ Brewfile updated"'
+alias bu='brew uninstall && echo "🍺 Updating Brewfile..." && brew bundle dump --force --file="$HOMEBREW_BUNDLE_FILE" && echo "✅ Brewfile updated"'
+alias bt='brew tap && echo "🍺 Updating Brewfile..." && brew bundle dump --force --file="$HOMEBREW_BUNDLE_FILE" && echo "✅ Brewfile updated"'
+alias but='brew untap && echo "🍺 Updating Brewfile..." && brew bundle dump --force --file="$HOMEBREW_BUNDLE_FILE" && echo "✅ Brewfile updated"'
+
 ## Needed for 1password ssh keys
-#SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 GPG_TTY=$(tty)
 export GPG_TTY
 

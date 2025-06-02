@@ -75,7 +75,7 @@ brew "mkcert"
 brew "neovim"
 brew "nmap"
 brew "node"
-brew "ollama"
+brew "ollama", restart_service: :changed
 brew "pipenv"
 brew "pipes-sh"
 brew "pipx"
@@ -97,7 +97,8 @@ brew "shellcheck"
 brew "sl"
 brew "speedtest-cli"
 brew "tailscale"
-brew "tenv", link: false
+brew "tenv"
+brew "terraform"
 brew "terraform-docs"
 brew "terragrunt", link: false
 brew "tflint"
