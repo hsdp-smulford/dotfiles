@@ -294,6 +294,9 @@ alias grhh='git reset --hard HEAD'
 alias gsta='git stash'
 alias gstp='git stash pop'
 
+# GH
+alias ghtoken='export GITHUB_TOKEN=$(gh auth token) && echo "GITHUB_TOKEN: ${GITHUB_TOKEN}"'
+
 # Navigation aliases
 alias ..='cd ..'
 alias ...='cd ../..'
