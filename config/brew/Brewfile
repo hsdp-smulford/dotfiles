@@ -97,10 +97,8 @@ brew "shellcheck"
 brew "sl"
 brew "speedtest-cli"
 brew "tailscale"
-brew "tenv"
-brew "terraform"
+brew "tenv", link: true
 brew "terraform-docs"
-brew "terragrunt", link: false
 brew "tflint"
 brew "thefuck"
 brew "tlrc"

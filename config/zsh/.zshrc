@@ -220,9 +220,9 @@ alias vim='nvim'
 alias ff='fastfetch'
 
 # AI stuff
-if [[ -z "$ANTHROPIC_API_KEY" ]]; then
-    export ANTHROPIC_API_KEY=$(keybase fs read keybase://private/jerseyshawn/secrets/anthropic/api_key)
-fi
+# if [[ -z "$ANTHROPIC_API_KEY" ]]; then
+#     export ANTHROPIC_API_KEY=$(keybase fs read keybase://private/jerseyshawn/secrets/anthropic/api_key)
+# fi
 
 # Git aliases
 alias g='git'
