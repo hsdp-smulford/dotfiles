@@ -139,7 +139,7 @@ plugins=(
   virtualenv
 )
 
-zstyle :omz:plugins:keychain identities id_ed25519_hsp
+zstyle :omz:plugins:keychain identities id_ed25519_hsp id_ed25519_sft
 zstyle :omz:plugins:keychain options --quiet --quick
 
 # Load Oh My Zsh
