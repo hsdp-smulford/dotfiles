@@ -188,12 +188,15 @@ alias dcd='docker compose down'
 alias dcl='docker compose logs -f'
 alias dcps='docker compose ps'
 
-# AWS aliases
+# AWS stuff
 #export AWS_CLI_AUTO_PROMPT=on
 export AWS_DEFAULT_OUTPUT=json
 export AWS_PAGER=
 export AWS_DEFAULT_REGION=us-east-1
 export AWS_COLOR=on
+
+# Terraform/OpenTofu setup
+export TENV_AUTO_INSTALL=true
 
 # Terraform aliases
 alias t='terraform'
@@ -204,6 +207,15 @@ alias tfa='terraform apply'
 alias tfd='terraform destroy'
 alias tff='terraform fmt -recursive'
 alias tfv='terraform validate'
+
+# OpenTofu aliases (use these in OpenTofu projects)
+alias to='tofu'
+alias toi='tofu init'
+alias top='tofu plan'
+alias toa='tofu apply'
+alias tod='tofu destroy'
+alias tof='tofu fmt -recursive'
+alias tov='tofu validate'
 
 # CLI replacements
 alias cat='bat'

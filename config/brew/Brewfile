@@ -75,6 +75,7 @@ brew "neovim"
 brew "nmap"
 brew "node"
 brew "ollama", restart_service: :changed
+brew "opentofu"
 brew "pipenv"
 brew "pipes-sh"
 brew "pipx"
@@ -95,9 +96,8 @@ brew "sl"
 brew "speedtest-cli"
 brew "tailscale"
 brew "tenv"
-brew "terraform", link: false
 brew "terraform-docs"
-brew "terragrunt", link: false
+brew "terragrunt"
 brew "tflint"
 brew "thefuck"
 brew "tlrc"
