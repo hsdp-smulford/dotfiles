@@ -74,6 +74,10 @@ export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm"
 export NPM_CONFIG_PREFIX="$XDG_DATA_HOME/npm"
 export PATH="$XDG_DATA_HOME/npm/bin:$PATH"
 
+# uv (Python package manager) XDG configuration
+export UV_CONFIG_FILE="$XDG_CONFIG_HOME/uv/uv.toml"
+export UV_CACHE_DIR="$XDG_CACHE_HOME/uv"
+
 # environment variables
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1

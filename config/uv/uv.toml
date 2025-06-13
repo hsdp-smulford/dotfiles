@@ -1,0 +1,3 @@
+[pip]
+# Use XDG directories for uv cache and data
+cache-dir = "/Users/shawn/.local/cache/uv"
