@@ -1,27 +1,28 @@
-# Location: $XDG_CONFIG_HOME/claude-code/config.yaml
-
-# Core settings
 core:
   log_level: "info"
   telemetry: false
   update_check: weekly
   xdg_compliant: true
   default_languages: ["python", "terraform", "json", "go", "yaml", "javascript", "shell"]
+  multiline: true
+  cleanup_period_days: 30
+  include_coauthored_by: false
+  verbose: false
+  auto_updater: true
 
-# Default model settings
 model:
   name: "claude-3-7-sonnet-20250219"
   context_window: 200000
   fallback_model: "claude-3-5-sonnet-20240620"
 
-# API Configuration
 api:
   url: "https://api.anthropic.com/v1"
   credentials_source: "script"
-  credentials_script: "$XDG_CONFIG_HOME/claude-code/scripts/get_1password_key.sh"
+  credentials_script: "$XDG_CONFIG_HOME/claude/scripts/get_1password_key.sh"
   rate_limit_strategy: "adaptive"
+  timeout: 60000
+  max_retries: 3
 
-# DevOps Integrations
 integrations:
   github:
     enabled: true
@@ -45,7 +46,6 @@ integrations:
     image_optimization: true
     colima_integration: true
 
-# Command aliases - expanded
 aliases:
   "e": "claude-code explain"
   "f": "claude-code fix"
@@ -56,3 +56,25 @@ aliases:
   "s": "claude-code security-scan"
   "tf": "claude-code terraform-analyze"
   "k8s": "claude-code k8s-validate"
+
+env:
+  AWS_DEFAULT_REGION: "us-east-1"
+  HOMEBREW_BUNDLE_FILE: "$XDG_CONFIG_HOME/brew/Brewfile"
+  EDITOR: "nvim"
+
+ui:
+  theme: "dark"
+  preferred_notif_channel: "terminal"
+  show_progress: true
+  confirm_destructive: true
+
+permissions:
+  allow_file_write: true
+  allow_shell_commands: true
+  allow_network_access: true
+  deny_patterns: []
+
+performance:
+  max_concurrent_requests: 3
+  memory_limit_mb: 2048
+  cache_responses: true

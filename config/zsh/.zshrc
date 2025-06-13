@@ -45,11 +45,9 @@ setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_SILENT
 
-# PATH setup with Homebrew priority
 eval "$(/opt/homebrew/bin/brew shellenv)"
-export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:$HOME/.local/bin:$PATH"
+export PATH="/usr/local/bin:/usr/local/sbin:$HOME/.local/bin:$PATH"
 
-# Python setup
 export PYENV_ROOT="${XDG_DATA_HOME}/pyenv"
 export PATH="${PYENV_ROOT}/bin:$PATH:."
 if command -v pyenv 1>/dev/null 2>&1; then
@@ -57,6 +55,8 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
+
+alias python='python3'
 
 # Go setup
 export GOPATH="$HOME/go"
