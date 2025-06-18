@@ -64,6 +64,12 @@ sudo cp ~/.config/zsh/zshrc.system /etc/zshrc
 brew bundle
 ```
 
+7. Configure development tools (optional):
+```bash
+# Restore Windsurf settings (if using Windsurf editor)
+bash ~/.config/windsurf/install.sh
+```
+
 ## Components
 
 ### XDG Base Directory Structure
@@ -84,6 +90,7 @@ brew bundle
 - `config/brew/` - Homebrew packages and installation
 - `config/git/` - Git configuration and aliases
 - `config/nvim/` - Neovim configuration
+- `config/windsurf/` - Windsurf editor configuration and MCP servers
 - And more in the `config/` directory
 
 ### Homebrew XDG Paths
@@ -101,6 +108,14 @@ brew bundle
    # Check if zsh plugins are installed
    ls $(brew --prefix)/share/zsh-autosuggestions
    ls $(brew --prefix)/share/zsh-syntax-highlighting
+   ```
+5. Configure development tools:
+   ```bash
+   # Backup current Windsurf settings (if already configured)
+   bash ~/.config/windsurf/backup.sh
+
+   # On new machine: restore Windsurf settings
+   bash ~/.config/windsurf/install.sh
    ```
 
 ## Troubleshooting

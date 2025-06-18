@@ -1,0 +1,1 @@
+{"mcpServers":{"tfmcp":{"command":"/Users/shawn/.cargo/bin/tfmcp","args":["mcp"],"env":{"HOME":"/Users/shawn","TERRAFORM_DIR":"/Users/shawn/hap/aft-global-customizations"}},"test-server":{"command":"echo","args":["test"],"env":{"TEST":"true"}}}}

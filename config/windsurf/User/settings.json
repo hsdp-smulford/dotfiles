@@ -1,0 +1,7 @@
+{
+  "workbench.colorTheme": "Default Dark+",
+  "git.openRepositoryInParentFolders": "always",
+  "explorer.confirmDelete": false,
+  "files.autoSave": "onFocusChange",
+  "editor.dropIntoEditor.preferences": []
+}
