@@ -110,3 +110,8 @@ config/cheat/cheatsheets/community/
 
 config/colima/_*
 config/wtf/log.txt
+
+# Claude Code local files
+config/claude/projects/
+config/claude/statsig/
+config/claude/todos/

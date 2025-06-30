@@ -218,3 +218,5 @@ Gemfile.lock
 .config/gh/hosts.yml
 
 **/.claude/settings.local.json
+
+**/CLAUDE.local.md
