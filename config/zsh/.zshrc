@@ -18,6 +18,11 @@ export XDG_AI_HOME="$XDG_CONFIG_HOME/ai"
 export ZSH="${XDG_DATA_HOME}/oh-my-zsh"
 ZSH_CUSTOM="$ZSH/custom"
 
+# Rust
+#export CARGO_HOME="$XDG_DATA_HOME/cargo"
+#export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+#export PATH="$CARGO_HOME/bin:$PATH"
+
 # History Configuration
 HISTFILE="${XDG_STATE_HOME}/zsh/history"
 HISTSIZE=1000000
@@ -143,7 +148,7 @@ plugins=(
   virtualenv
 )
 
-zstyle :omz:plugins:keychain identities id_ed25519_hsp id_ed25519_sft
+zstyle :omz:plugins:keychain identities id_ed25519_pmf id_ed25519_sft
 zstyle :omz:plugins:keychain options --quiet --quick
 
 # Load Oh My Zsh
